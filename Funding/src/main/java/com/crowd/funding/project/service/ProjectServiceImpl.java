@@ -63,4 +63,9 @@ public class ProjectServiceImpl implements ProjectService {
 		projectDao.story_update(dto);
 	}
 
+	@Override
+	public void request(int pro_id) {
+		projectDao.request(pro_id);
+	}
+
 }

@@ -58,4 +58,9 @@ public class ProjectDAOImpl implements ProjectDAO {
 		sqlSession.update("project.story_update", dto);
 	}
 
+	@Override
+	public void request(int pro_id) {
+		sqlSession.update("project.request", pro_id);
+	}
+
 }

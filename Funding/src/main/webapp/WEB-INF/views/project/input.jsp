@@ -35,6 +35,20 @@
 	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css"rel="stylesheet">
 	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet"> --%>
 <style>
+.table_view {
+	width: 600px;
+	margin: 0 auto;
+}
+
+.table_view tfoot {
+	text-align: center;
+}
+
+.ok {
+	position: absolute;
+	right: 7%;
+	top: 12%; 
+}
 p {
 	margin: 20px 0px;
 }
@@ -45,9 +59,32 @@ p {
 	height: 100px;
 }
 </style>
+<script type="text/javascript">
+$(function() {
+
+	$("#btn_up").click(function() {
+		document.getElementById('makerform').action = "${path}/maker/maker_up?maker_idx=${maker.maker_idx}";
+		document.getElementById('makerform').submit();
+	});
+
+	$("#btn_del").click(function() {
+		document.getElementById('makerform').action = "${path}/maker/maker_del?maker_idx=${maker.maker_idx}";
+		document.getElementById('makerform').submit();
+	});
+	
+	$("#btn_ok").click(function() {
+		alert("승인요청이 되었습니다. 2주 안에 처리됩니다");
+		document.getElementById('ok').submit();
+	});
+});
+</script>
 </head>
 <body>
 	<%@ include file="../include/navbar.jsp"%>
+	<form id="ok" name="ok" action="${path}/project/request" method="post">
+		<input type="hidden" name="pro_id" value="${detail.pro_id}"> 
+		<div class="ok"><button id="btn_ok" type="button" class="btn btn-outline-primary">승인요청</button></div>
+	</form>
 	<div class="container">
 		<div class="row">
 			<div class="col">
@@ -55,105 +92,132 @@ p {
 					<li class="nav-item"><a class="nav-link active"
 						data-toggle="tab" href="#basic">기본정보</a></li>
 					<li class="nav-item"><a class="nav-link" data-toggle="tab"
-						href="#asd">리워드</a></li>
+						href="#reward">리워드</a></li>
 					<li class="nav-item"><a class="nav-link" data-toggle="tab"
 						href="#story">스토리</a></li>
 					<li class="nav-item"><a class="nav-link" data-toggle="tab"
-						href="#zx">메이커</a></li>
+						href="#maker">메이커</a></li>
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane fade show active" id="basic">
-						<p><form name="input_form" enctype="multipart/form-data" method="post"
-		action = "${path}/project/save1">
-		<table>
-			<tr>
-				<td>카테고리</td>
-			</tr>
-			<tr>
-				<td>오픈 후, 노출될 카테고리를 선택해 주세요.</td>
-			</tr>
-			<tr>
-				<td><select id="pro_category" name="pro_category">
-						<option value="" <c:out value="${detail.pro_category == null ? 'selected' : ''}"/>>프로젝트 카테고리</option>
-						<option value="1" <c:out value="${detail.pro_category eq '1' ? 'selected' : ''}"/>>테크·가전</option>
-						<option value="2" <c:out value="${detail.pro_category eq '2' ? 'selected' : ''}"/>>패션·잡화</option>
-						<option value="3" <c:out value="${detail.pro_category eq '3' ? 'selected' : ''}"/>>뷰티</option> 
-						<option value="4" <c:out value="${detail.pro_category eq '4' ? 'selected' : ''}"/>>푸드</option>
-						<option value="5" <c:out value="${detail.pro_category eq '5' ? 'selected' : ''}"/>>홈리빙</option>
-						<option value="6" <c:out value="${detail.pro_category eq '6' ? 'selected' : ''}"/>>디자인소품</option>
-						<option value="7" <c:out value="${detail.pro_category eq '7' ? 'selected' : ''}"/>>여행·레저</option>
-						<option value="8" <c:out value="${detail.pro_category eq '8' ? 'selected' : ''}"/>>스포츠·모빌리티</option>
-						<option value="9" <c:out value="${detail.pro_category eq '9' ? 'selected' : ''}"/>>반려동물</option>
-						<option value="10" <c:out value="${detail.pro_category eq '10' ? 'selected' : ''}"/>>모임</option>
-						<option value="11" <c:out value="${detail.pro_category eq '11' ? 'selected' : ''}"/>>공연·컬쳐</option>
-						<option value="12" <c:out value="${detail.pro_category eq '12' ? 'selected' : ''}"/>>소셜·캠페인</option>
-						<option value="13" <c:out value="${detail.pro_category eq '13' ? 'selected' : ''}"/>>교육·키즈</option>
-						<option value="14" <c:out value="${detail.pro_category eq '14' ? 'selected' : ''}"/>>게임·취미</option>
-						<option value="15" <c:out value="${detail.pro_category eq '15' ? 'selected' : ''}"/>>출판</option>
-						<option value="16" <c:out value="${detail.pro_category eq '16' ? 'selected' : ''}"/>>기부·후원</option>
-						</select></td>
-			</tr>
-			<tr>
-				<td>프로젝트 제목</td>
-			</tr>
-			<tr>
-				<td>프로젝트의 핵심 내용을 담을 수 있고 간결한 제목을 정해주세요.</td>
-			</tr>
-			<tr>
-				<td><input type="text" id="pro_name" name="pro_name" value="${detail.pro_name}"></td>
-			</tr>
-			<tr>
-				<td>프로젝트 키워드</td>
-			</tr>
-			<tr>
-				<td>제목 외에도 키워드 검색 시 검색 결과에 프로젝트가 나타납니다.</td>
-			</tr>
-			<tr>
-				<td>#<input type="text" name="pro_keyword1" id="pro_keyword1"  value="${detail.pro_keyword1}">&nbsp; 
-					#<input type="text" name="pro_keyword2" id="pro_keyword2"  value="${detail.pro_keyword2}">&nbsp; 
-					#<input type="text" name="pro_keyword3" id="pro_keyword3"  value="${detail.pro_keyword3}"></td>
-			</tr>
-			<tr>
-				<td>목표금액</td>
-			</tr>
-			<tr>
-				<td>목표 금액을 적어주세요.</td>
-			</tr>
-			<tr>
-				<td><input type="text" name="pro_price" id="pro_price" value="${detail.pro_price}"></td>
-			</tr>
-			<tr>
-				<td>프로젝트 진행기간</td>
-			</tr>
-			<tr>
-				<td>프로젝트 진행기간을 정해주세요.</td>
-			</tr>
-			<tr>
-				<td><input type="text" name="pro_start" id="pro_start" class="datepicker" value="${detail.pro_start}"> ~
-					<input type="text" name="pro_end" id="pro_end" class="datepicker" value="${detail.pro_end}"></td>
-			</tr>
-			<tr>
-				<td>프로젝트 대표 이미지</td>
-			</tr>
-			<tr>
-				<td>프로젝트를 한 눈에 나타낼 수 있는 이미지를 등록해주세요.</td>
-			</tr>
-			<tr>
-				<td>현재 파일 : ${detail.pro_imageURL}&nbsp;<input type="file" name="file1" id="file1" size="50"></td>
-			</tr>
-			<tr>
-				<td><input type="hidden" name="pro_id" value="${detail.pro_id}"></td>
-			</tr>
-			<tr>
-				<td><input type="button" value="저장하기" id='save1' ></td>
-			</tr>
-		</table>
-	</form></p>
+						<p>
+						<form name="input_form" enctype="multipart/form-data"
+							method="post" action="${path}/project/save1">
+							<table>
+								<tr>
+									<td>카테고리</td>
+								</tr>
+								<tr>
+									<td>오픈 후, 노출될 카테고리를 선택해 주세요.</td>
+								</tr>
+								<tr>
+									<td><select id="pro_category" name="pro_category">
+											<option value=""
+												<c:out value="${detail.pro_category == null ? 'selected' : ''}"/>>프로젝트
+												카테고리</option>
+											<option value="1"
+												<c:out value="${detail.pro_category eq '1' ? 'selected' : ''}"/>>테크·가전</option>
+											<option value="2"
+												<c:out value="${detail.pro_category eq '2' ? 'selected' : ''}"/>>패션·잡화</option>
+											<option value="3"
+												<c:out value="${detail.pro_category eq '3' ? 'selected' : ''}"/>>뷰티</option>
+											<option value="4"
+												<c:out value="${detail.pro_category eq '4' ? 'selected' : ''}"/>>푸드</option>
+											<option value="5"
+												<c:out value="${detail.pro_category eq '5' ? 'selected' : ''}"/>>홈리빙</option>
+											<option value="6"
+												<c:out value="${detail.pro_category eq '6' ? 'selected' : ''}"/>>디자인소품</option>
+											<option value="7"
+												<c:out value="${detail.pro_category eq '7' ? 'selected' : ''}"/>>여행·레저</option>
+											<option value="8"
+												<c:out value="${detail.pro_category eq '8' ? 'selected' : ''}"/>>스포츠·모빌리티</option>
+											<option value="9"
+												<c:out value="${detail.pro_category eq '9' ? 'selected' : ''}"/>>반려동물</option>
+											<option value="10"
+												<c:out value="${detail.pro_category eq '10' ? 'selected' : ''}"/>>모임</option>
+											<option value="11"
+												<c:out value="${detail.pro_category eq '11' ? 'selected' : ''}"/>>공연·컬쳐</option>
+											<option value="12"
+												<c:out value="${detail.pro_category eq '12' ? 'selected' : ''}"/>>소셜·캠페인</option>
+											<option value="13"
+												<c:out value="${detail.pro_category eq '13' ? 'selected' : ''}"/>>교육·키즈</option>
+											<option value="14"
+												<c:out value="${detail.pro_category eq '14' ? 'selected' : ''}"/>>게임·취미</option>
+											<option value="15"
+												<c:out value="${detail.pro_category eq '15' ? 'selected' : ''}"/>>출판</option>
+											<option value="16"
+												<c:out value="${detail.pro_category eq '16' ? 'selected' : ''}"/>>기부·후원</option>
+									</select></td>
+								</tr>
+								<tr>
+									<td>프로젝트 제목</td>
+								</tr>
+								<tr>
+									<td>프로젝트의 핵심 내용을 담을 수 있고 간결한 제목을 정해주세요.</td>
+								</tr>
+								<tr>
+									<td><input type="text" id="pro_name" name="pro_name"
+										value="${detail.pro_name}"></td>
+								</tr>
+								<tr>
+									<td>프로젝트 키워드</td>
+								</tr>
+								<tr>
+									<td>제목 외에도 키워드 검색 시 검색 결과에 프로젝트가 나타납니다.</td>
+								</tr>
+								<tr>
+									<td>#<input type="text" name="pro_keyword1"
+										id="pro_keyword1" value="${detail.pro_keyword1}">&nbsp;
+										#<input type="text" name="pro_keyword2" id="pro_keyword2"
+										value="${detail.pro_keyword2}">&nbsp; #<input
+										type="text" name="pro_keyword3" id="pro_keyword3"
+										value="${detail.pro_keyword3}"></td>
+								</tr>
+								<tr>
+									<td>목표금액</td>
+								</tr>
+								<tr>
+									<td>목표 금액을 적어주세요.</td>
+								</tr>
+								<tr>
+									<td><input type="text" name="pro_price" id="pro_price"
+										value="${detail.pro_price}"></td>
+								</tr>
+								<tr>
+									<td>프로젝트 진행기간</td>
+								</tr>
+								<tr>
+									<td>프로젝트 진행기간을 정해주세요.</td>
+								</tr>
+								<tr>
+									<td><input type="text" name="pro_start" id="pro_start"
+										class="datepicker" value="${detail.pro_start}"> ~ <input
+										type="text" name="pro_end" id="pro_end" class="datepicker"
+										value="${detail.pro_end}"></td>
+								</tr>
+								<tr>
+									<td>프로젝트 대표 이미지</td>
+								</tr>
+								<tr>
+									<td>프로젝트를 한 눈에 나타낼 수 있는 이미지를 등록해주세요.</td>
+								</tr>
+								<tr>
+									<td>현재 파일 : ${detail.pro_imageURL}&nbsp;<input type="file"
+										name="file1" id="file1" size="50"></td>
+								</tr>
+								<tr>
+									<td><input type="hidden" name="pro_id"
+										value="${detail.pro_id}"></td>
+								</tr>
+								<tr>
+									<td><input type="button" value="저장하기" id='save1'></td>
+								</tr>
+							</table>
+						</form>
+						</p>
 					</div>
-					<div class="tab-pane fade" id="asd">
-						<p>Nunc vitae turpis id nibh sodales commodo et non augue.
-							Proin fringilla ex nunc. Integer tincidunt risus ut facilisis
-							tristique.</p>
+					<div class="tab-pane fade" id="reward">
+						<p>리워드</p>
 					</div>
 					<div class="tab-pane fade" id="story">
 						<p>
@@ -172,18 +236,16 @@ p {
 						</p>
 
 					</div>
-					<div class="tab-pane fade" id="zx">
-						<p>asd. Etiam ut mattis leo, vel fermentum tellus. Sed
-							sagittis rhoncus venenatis. Quisque commodo consectetur faucibus.
-							Aenean eget ultricies justo.</p>
-					</div>
+					x
 				</div>
 			</div>
 		</div>
 	</div>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
 </body>
 

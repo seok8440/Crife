@@ -17,6 +17,7 @@
 			<c:if test="${i%j == 0 }">
 				<tr>
 			</c:if>
+			<c:if test="${dto.pro_status == 1}">
 			<td><img src="${path}/resources/images/${dto.pro_imageURL}"
 					width="100px" height="100px"></td>
 			<td><a href="${path}/project/detail/${dto.pro_id}">${dto.pro_name}</a></td>
@@ -76,6 +77,7 @@
 				</tr>
 			</c:if>
 			<c:set var="i" value="${i+1}" />
+			</c:if>
 		</c:forEach>
 	</table>
 

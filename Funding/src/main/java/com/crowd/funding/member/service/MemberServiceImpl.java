@@ -48,7 +48,7 @@ public class MemberServiceImpl implements MemberService {
 		sendMail.setText(new StringBuffer().append("<h1>메일인증</h1>")
 				.append("<a href='http://localhost:8888/funding/user/emailConfirm?mem_email=" + memDTO.getMem_email())
 				.append("&email_key=" + email_key + "' target='_blank'>이메일 인증</a>").toString());
-		sendMail.setFrom("lulumos1993@gmail.com", "페퍼민트");
+		sendMail.setFrom("seok8440@gmail.com", "jin");
 		sendMail.setTo(memDTO.getMem_email());
 		sendMail.send();
 
@@ -133,7 +133,7 @@ public class MemberServiceImpl implements MemberService {
 				.append("&email_key=" + email_key + "' target='_blank'>비밀번호 변경</a>").append(" 어디로 붙을까?").append("\n") // 안됨
 				.append("a").append(System.getProperty("line.separator")) // 안됨
 				.append("b").toString());
-		sendMail.setFrom("lulumos1993@gmail.com", "페퍼민트");
+		sendMail.setFrom("seok8440@gmail.com", "jin");
 		sendMail.setTo(find);
 		sendMail.send();
 

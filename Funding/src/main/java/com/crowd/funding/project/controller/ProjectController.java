@@ -110,7 +110,7 @@ public class ProjectController {
 	@RequestMapping("update_page")
 	public String update_page(Model model, ProjectDTO dto) { 
 		model.addAttribute("detail",projectService.pro_detail(dto.getPro_id()));
-		return "project/input_update";
+		return "project/input";
 	}
 	
 	@RequestMapping("story/{pro_id}")
@@ -190,8 +190,10 @@ public class ProjectController {
 		return "project/story_update";
 	}
 	
-	@RequestMapping("project/inputgo")
-	public String inp() {
+	@RequestMapping("project/request")
+	public String request(Model model, int pro_id) {
+		projectService.request(pro_id);
+		model.addAttribute("detail",projectService.pro_detail(pro_id));
 		return "project/input";
 	}
 

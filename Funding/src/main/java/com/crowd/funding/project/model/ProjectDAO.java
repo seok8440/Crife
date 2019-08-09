@@ -20,4 +20,6 @@ public interface ProjectDAO {
 	void my_delete(int pro_id);
 
 	void story_update(ProjectDTO dto);
+	
+	void request(int pro_id);
 }

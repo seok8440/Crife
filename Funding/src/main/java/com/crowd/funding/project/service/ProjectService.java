@@ -14,4 +14,5 @@ public interface ProjectService {
 	List<ProjectDTO> my_pro(int mem_idx);
 	void my_delete(int pro_id);
 	void story_update(ProjectDTO dto);
+	void request(int pro_id);
 }

@@ -50,4 +50,10 @@
 		 	pro_summary=#{pro_summary}, pro_content=#{pro_content}
 		where pro_id=#{pro_id} limit 1
 	</update>
+	
+	<update id="request">
+		update project
+		set pro_status=2
+		where pro_id=#{pro_id} limit 1
+	</update>
 </mapper>

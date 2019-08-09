@@ -52,7 +52,7 @@ ul.topnav li.right {
 </style>
 </head>
 <body>
-<center><img src="images/crife.png" alt="crife" width="200" height="100"></center>
+<center><img src="${path}/images/crife.png" alt="crife" width="200" height="100"></center>
 	<ul class="topnav">
 		<li><a class="active" href="${path}/">Home</a></li>
 		<li><a href="${path}/project/listv">프로젝트 더보기</a></li>
