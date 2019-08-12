@@ -9,7 +9,6 @@
 </head>
 <body>
 <%@ include file="../include/navbar.jsp"%>
-<%@ include file="project_navbar.jsp"%>
 
 <h2>${dto.pro_name}</h2>
 

@@ -20,7 +20,11 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public void add(ProjectDTO dto) {
 		projectDao.add(dto);
-
+	}
+	
+	@Override
+	public void maker(ProjectDTO dto) {
+		projectDao.maker(dto);
 	}
 	
 	@Override

@@ -15,7 +15,13 @@ public class ProjectDAOImpl implements ProjectDAO {
 
 	@Override
 	public void add(ProjectDTO dto) {
+		sqlSession.insert("project.maker",dto);
 		sqlSession.insert("project.add", dto);
+	}
+	
+	@Override
+	public void maker(ProjectDTO dto) {
+		sqlSession.update("project_maker_idx", dto);
 	}
 
 	@Override

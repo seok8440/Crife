@@ -26,6 +26,8 @@ public class ProjectDTO {
 	private MultipartFile file1;
 	private MultipartFile file2;
 	private String day;
+	private int maker_idx;
+	private String maker_name;
 
 	public int getPro_id() {
 		return pro_id;
@@ -204,6 +206,22 @@ public class ProjectDTO {
 
 	public void setDay(String day) {
 		this.day = day;
+	}
+
+	public int getMaker_idx() {
+		return maker_idx;
+	}
+
+	public void setMaker_idx(int maker_idx) {
+		this.maker_idx = maker_idx;
+	}
+
+	public String getMaker_name() {
+		return maker_name;
+	}
+
+	public void setMaker_name(String maker_name) {
+		this.maker_name = maker_name;
 	}
 
 }

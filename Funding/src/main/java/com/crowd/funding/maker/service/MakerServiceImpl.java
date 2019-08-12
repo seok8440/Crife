@@ -8,7 +8,7 @@ import com.crowd.funding.maker.model.MakerDAO;
 import com.crowd.funding.maker.model.MakerDTO;
 
 @Service
-public class MakerServiceImple implements MakerService {
+public class MakerServiceImpl implements MakerService {
 
 	@Inject
 	MakerDAO maDAO;

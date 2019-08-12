@@ -22,4 +22,6 @@ public interface ProjectDAO {
 	void story_update(ProjectDTO dto);
 	
 	void request(int pro_id);
+	
+	void maker(ProjectDTO dto);
 }

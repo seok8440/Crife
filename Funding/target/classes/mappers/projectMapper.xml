@@ -8,9 +8,21 @@
 	
 	<insert id="add" parameterType="com.crowd.funding.project.model.ProjectDTO" useGeneratedKeys="true"   
   		keyProperty="pro_id">
-  			insert into project(pro_status,mem_idx)
-			values(0,#{mem_idx})
+  			insert into project(pro_status, mem_idx, maker_idx)
+			values(1,#{mem_idx}, #{maker_idx})
 	</insert>
+	
+	<insert id="maker" parameterType="com.crowd.funding.project.model.ProjectDTO" useGeneratedKeys="true"
+		keyProperty="maker_idx">
+		insert into maker(mem_idx)
+		values(#{mem_idx})
+	</insert>
+	
+	<update id="maker_update">
+		update project
+		set maker_idx=#{maker_idx}
+		where pro_id=#{pro_id}
+	</update>
 	
 	<update id="save1">
 		update project

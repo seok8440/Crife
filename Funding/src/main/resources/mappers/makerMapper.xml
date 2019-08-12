@@ -12,14 +12,21 @@
   	insert into maker(maker_name, maker_phone, maker_intro,mem_idx) 
   			values(#{maker_name}, #{maker_phone},#{maker_intro},#{mem_idx})
   </insert>
+  
   <update id="memtype">
   	update member set mem_type=1 where mem_idx=#{mem_idx}
   </update>
+  
   <select id="idx" resultType="int">
   	select count(*) from maker where mem_idx=#{mem_idx}
   </select>
+  
   <select id="makeridx" resultType="int">
-  	select maker_idx from maker where mem_idx=#{mem_idx}
+  	select mak.maker_idx 
+  	from maker as mak, 
+  	(select pro_id, mem_idx, maker_idx from project where pro_id=#{pro_id}) as pro
+  	where mak.maker_idx = pro.maker_idx
+  	<!-- select maker_idx from maker where mem_idx=#{mem_idx} -->
   </select>
   
   <select id="makerinfo" resultType="com.crowd.funding.maker.model.MakerDTO">

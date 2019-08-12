@@ -55,9 +55,14 @@ public class ProjectController {
 	public String input(HttpSession session, MemberDTO mem, ProjectDTO dto, RedirectAttributes rttr, Model model) {
 		// 로그인 상태일 때
 		if (session != null) {
+			
+			
 			projectService.add(dto); // 프로젝트 생성
-			int id = dto.getPro_id(); // 생성된 프로젝트 번호
-			rttr.addAttribute("id", id); // controller로 id값을 넘길 수 있게 설정
+			int pro_id = dto.getPro_id(); // 생성된 프로젝트 번호
+			int maker_idx = dto.getMem_idx(); // 생성된 메이커 번호
+			
+			rttr.addAttribute("pro_id", pro_id); // controller로 id값을 넘길 수 있게 설정
+			projectService.maker(dto);
 			return "redirect:/project/input_page"; // id값을 넘김
 		} else {
 			return "redirect:/project/login"; // 비로그인 상태일 때는 로그인 페이지로 이동
@@ -66,8 +71,8 @@ public class ProjectController {
 	
 	// 위에 controller에서 redirect로 id값이 넘어옴 
 	@RequestMapping("input_page")
-	public String input_list(HttpSession session, ProjectDTO dto, @RequestParam int id, Model model) {
-		model.addAttribute("detail", projectService.pro_detail(id)); // 프로젝트 번호에 맞는 프로젝트 정보를 가져옴
+	public String input_list(HttpSession session, ProjectDTO dto, @RequestParam int pro_id, Model model) {
+		model.addAttribute("detail", projectService.pro_detail(pro_id)); // 프로젝트 번호에 맞는 프로젝트 정보를 가져옴
 		return "project/input"; //input.jsp로 이동
 	}
 

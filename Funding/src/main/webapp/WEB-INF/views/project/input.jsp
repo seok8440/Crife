@@ -5,26 +5,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bootstrap 4</title>
+<title>크라이프 : 내 프로젝트 수정</title>
 <%@ include file="../include/header.jsp"%>
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <!-- 달력관련 css파일들을 불러옵니다. -->
-<link rel="stylesheet" href="${path}/resources/pickadate/lib/themes/default.css">
-<link rel="stylesheet" href="${path}/resources/pickadate/lib/themes/default.date.css">
+<link rel="stylesheet"
+	href="${path}/resources/pickadate/lib/themes/default.css">
+<link rel="stylesheet"
+	href="${path}/resources/pickadate/lib/themes/default.date.css">
 <!-- 달력관련 js파일들을 불러옵니다. -->
-	<script src="${path}/resources/pickadate/lib/picker.js"></script>
-	<script>
-  		var pk = jQuery.noConflict();
-	</script>
-	<script src="${path}/resources/pickadate/lib/picker.date.js"></script>
-	<script>
-  		var pk = jQuery.noConflict();
-	</script>
-	<script src="${path}/resources/pickadate/lib/legacy.js"></script>
-	<script>
-  		var pk = jQuery.noConflict();
-	</script>
+<script src="${path}/resources/pickadate/lib/picker.js"></script>
+<script>
+	var pk = jQuery.noConflict();
+</script>
+<script src="${path}/resources/pickadate/lib/picker.date.js"></script>
+<script>
+	var pk = jQuery.noConflict();
+</script>
+<script src="${path}/resources/pickadate/lib/legacy.js"></script>
+<script>
+	var pk = jQuery.noConflict();
+</script>
 <%-- <!-- summernote -->
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
@@ -47,8 +50,9 @@
 .ok {
 	position: absolute;
 	right: 7%;
-	top: 12%; 
+	top: 25%;
 }
+
 p {
 	margin: 20px 0px;
 }
@@ -60,30 +64,36 @@ p {
 }
 </style>
 <script type="text/javascript">
-$(function() {
+	$(function() {
 
-	$("#btn_up").click(function() {
-		document.getElementById('makerform').action = "${path}/maker/maker_up?maker_idx=${maker.maker_idx}";
-		document.getElementById('makerform').submit();
-	});
+		$("#btn_up")
+				.click(
+						function() {
+							document.getElementById('makerform').action = "${path}/maker/maker_up?maker_idx=${maker.maker_idx}";
+							document.getElementById('makerform').submit();
+						});
 
-	$("#btn_del").click(function() {
-		document.getElementById('makerform').action = "${path}/maker/maker_del?maker_idx=${maker.maker_idx}";
-		document.getElementById('makerform').submit();
+		$("#btn_del")
+				.click(
+						function() {
+							document.getElementById('makerform').action = "${path}/maker/maker_del?maker_idx=${maker.maker_idx}";
+							document.getElementById('makerform').submit();
+						});
+
+		$("#btn_ok").click(function() {
+			alert("승인요청이 되었습니다. 2주 안에 처리됩니다");
+			document.getElementById('ok').submit();
+		});
 	});
-	
-	$("#btn_ok").click(function() {
-		alert("승인요청이 되었습니다. 2주 안에 처리됩니다");
-		document.getElementById('ok').submit();
-	});
-});
 </script>
 </head>
 <body>
 	<%@ include file="../include/navbar.jsp"%>
 	<form id="ok" name="ok" action="${path}/project/request" method="post">
-		<input type="hidden" name="pro_id" value="${detail.pro_id}"> 
-		<div class="ok"><button id="btn_ok" type="button" class="btn btn-outline-primary">승인요청</button></div>
+		<input type="hidden" name="pro_id" value="${detail.pro_id}">
+		<div class="ok">
+			<button id="btn_ok" type="button" class="btn btn-outline-primary">승인요청</button>
+		</div>
 	</form>
 	<div class="container">
 		<div class="row">
@@ -234,9 +244,45 @@ $(function() {
 							<input type="button" value="저장하기" id='save3'>
 						</form>
 						</p>
-
 					</div>
-					x
+					<div class="tab-pane fade" id="maker">
+						<form id="makerform" action="/funding/maker/makerPOST"
+							method="post" enctype="multipart/form-data">
+
+							<table class="table_view">
+								<caption>
+									메이커 등록 <input type="text" name="mem_idx" id="mem_idx"
+										value="${login.mem_idx}">
+								</caption>
+								<tr>
+									<th scope="row">메이커 이름</th>
+									<td><input name="maker_name" id="maker_name" type="text"
+										placeholder="이름"></td>
+								</tr>
+								<tr>
+									<th scope="row">메이커 전화번호</th>
+									<td><input name="maker_phone" id="maker_phone" type="text"
+										placeholder="전화번호"></td>
+								</tr>
+								<tr>
+									<th scope="row">주소</th>
+									<td>나중에 추가</td>
+								</tr>
+								<tr>
+									<th scope="row">메이커 소개</th>
+									<td><input name="maker_intro" id="maker_intro" type="text"
+										placeholder="소개"></td>
+								</tr>
+								<tr>
+									<th scope="row">메이커 이미지</th>
+									<td><input type="file" name="maker_photo"></td>
+								</tr>
+								<tr>
+									<th colspan="2"><button id="btnSave">저장하기</button></th>
+								</tr>
+							</table>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -251,21 +297,21 @@ $(function() {
 
 <script type="text/javascript">
 	pk('.datepicker').pickadate({
-		format: 'yyyy-mm-dd',
-		formatSubmit: 'yyyy-mm-dd'
+		format : 'yyyy-mm-dd',
+		formatSubmit : 'yyyy-mm-dd'
 	})
 </script>
 <script>
 	$(document).ready(function() {
 		//프로젝트등록 유효성검사
-	    $("#save1").click(function(){
-	        var pro_name = $("#pro_name").val();
-	        var pro_price = $("#pro_price").val();
-	        var pro_start = $("#pro_start").val();
-	        var pro_end = $("#pro_end").val();
-	        document.input_form.submit();
-	        alert("저장되었습니다");
-	    });
+		$("#save1").click(function() {
+			var pro_name = $("#pro_name").val();
+			var pro_price = $("#pro_price").val();
+			var pro_start = $("#pro_start").val();
+			var pro_end = $("#pro_end").val();
+			document.input_form.submit();
+			alert("저장되었습니다");
+		});
 
 		$('#save3').click(function() {
 			document.story_form.submit();
