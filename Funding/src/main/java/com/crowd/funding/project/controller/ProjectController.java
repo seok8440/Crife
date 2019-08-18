@@ -52,20 +52,19 @@ public class ProjectController {
 
 	// input.jsp로 이동
 	@RequestMapping("add")
-	public String input(HttpSession session, MemberDTO mem, ProjectDTO dto, RedirectAttributes rttr, Model model) {
+	public String input(HttpSession session, ProjectDTO dto, RedirectAttributes rttr, Model model) {
 		// 로그인 상태일 때
 		if (session != null) {
-			
-			
+			projectService.makerAdd(dto);// 메이커생성
 			projectService.add(dto); // 프로젝트 생성
 			int pro_id = dto.getPro_id(); // 생성된 프로젝트 번호
 			int maker_idx = dto.getMem_idx(); // 생성된 메이커 번호
 			
-			rttr.addAttribute("pro_id", pro_id); // controller로 id값을 넘길 수 있게 설정
-			projectService.maker(dto);
+			rttr.addAttribute("pro_id", pro_id); // controller로 id값을 넘길 수 있게 설정                                                                                                                                                                   ㅍ
+			projectService.maker(dto); // 현재 생성된 프로젝트에 maker번호 추가해줌
 			return "redirect:/project/input_page"; // id값을 넘김
 		} else {
-			return "redirect:/project/login"; // 비로그인 상태일 때는 로그인 페이지로 이동
+			return "/user/login"; // 비로그인 상태일 때는 로그인 페이지로 이동
 		}
 	}
 	
@@ -79,6 +78,7 @@ public class ProjectController {
 	// input_update.jsp에서 저장하기버튼 클릭 시
 	@RequestMapping("save1")
 	public String update(HttpSession session, ProjectDTO dto, Model model, MemberDTO mem) {
+		// 공백일 경우 null 셋팅
 		if(dto.getPro_start().equals("") || dto.getPro_end().equals("")) {
 			dto.setPro_start(null);
 			dto.setPro_end(null);
@@ -104,7 +104,36 @@ public class ProjectController {
 			ProjectDTO dto2 = projectService.pro_detail(dto.getPro_id());
 			dto.setPro_imageURL(dto2.getPro_imageURL());
 		}
-		// 상품정보 수정
+		projectService.save1(dto);
+		model.addAttribute("id", session.getAttribute("login"));
+		model.addAttribute("detail", projectService.pro_detail(dto.getPro_id()));
+		return "project/input";
+	}
+	
+	// maker에서 저장하기 클릭 시 
+	@RequestMapping("save4")
+	public String maker_update(HttpSession session, ProjectDTO dto, Model model) {
+		String filename = "-";
+		// 새로운 첨부 파일이 있으면
+		if (!dto.getFile2().isEmpty()) {
+			// 첨부 파일의 이름
+			filename = dto.getFile2().getOriginalFilename();
+			try {
+				String path ="D:\\JavaBigData2th\\mywork_spring\\.metadata\\.plugins\\"
+						+ "org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Funding\\resources\\images\\";
+				// 디렉토리가 존재하지 않으면 생성
+				new File(path).mkdir();
+				// 임시 디렉토리에 저장된 첨부파일을 이동
+				dto.getFile2().transferTo(new File(path + filename));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			dto.setPro_imageURL(filename);
+		} else { // 새로운 첨부 파일이 없을 때
+			// 기존에 첨부한 파일 정보를 가져옴
+			ProjectDTO dto2 = projectService.pro_detail(dto.getPro_id());
+			dto.setPro_imageURL(dto2.getPro_imageURL());
+		}
 		projectService.save1(dto);
 		model.addAttribute("id", session.getAttribute("login"));
 		model.addAttribute("detail", projectService.pro_detail(dto.getPro_id()));
@@ -124,14 +153,6 @@ public class ProjectController {
 		mav.addObject("detail", projectService.pro_detail(pro_id));
 		return mav;
 	}
-	
-	// 수정하기 버튼 눌렀을 때 수정폼으로가는 매핑
-	/*
-	 * @RequestMapping("update/{pro_id}") public ModelAndView
-	 * updatepage(@PathVariable("pro_id") int pro_id, ModelAndView mav) {
-	 * mav.setViewName("project/input_update"); mav.addObject("detail",
-	 * projectService.pro_detail(pro_id)); return mav; }
-	 */
 	
 	@RequestMapping("update/{pro_id}")
 	public ModelAndView updatepage(@PathVariable("pro_id") int pro_id, ModelAndView mav) {
@@ -161,38 +182,6 @@ public class ProjectController {
 	public String my_delete(int pro_id) {
 		projectService.my_delete(pro_id);
 		return "redirect:/project/my_pro";
-	}
-	
-	// update >>> detail 이동
-	@RequestMapping("story/detail")
-	public String my_story(Model model, ProjectDTO dto) {
-		String filename = "-";
-		if (!dto.getFile2().isEmpty()) {
-			filename = dto.getFile2().getOriginalFilename();
-			try {
-				String path ="D:\\JavaBigData2th\\mywork_spring\\.metadata\\.plugins\\"
-						+ "org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Funding\\resources\\images\\";
-				new File(path).mkdir();
-				dto.getFile2().transferTo(new File(path + filename));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			dto.setPro_content(filename);
-		} else {
-			ProjectDTO dto2 = projectService.pro_detail(dto.getPro_id());
-			dto.setPro_content(dto2.getPro_content());
-		}
-		projectService.story_update(dto);
-		model.addAttribute("detail",projectService.pro_detail(dto.getPro_id()));
-		return "project/input";
-	}
-	
-	// detail >>> update 이동
-	@RequestMapping("story/update")
-	public String story_save(Model model, ProjectDTO dto) {
-		System.out.println("detail >>> update "+dto.getPro_id());
-		model.addAttribute("detail",projectService.pro_detail(dto.getPro_id()));
-		return "project/story_update";
 	}
 	
 	@RequestMapping("project/request")

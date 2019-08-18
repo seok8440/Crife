@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.crowd.funding.member.model.MemberDTO;
+
 
 @Repository
 public class MakerDAOImpl implements MakerDAO {

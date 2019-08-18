@@ -72,4 +72,9 @@ public class ProjectServiceImpl implements ProjectService {
 		projectDao.request(pro_id);
 	}
 
+	@Override
+	public void makerAdd(ProjectDTO dto) {
+		projectDao.makerAdd(dto);
+	}
+
 }

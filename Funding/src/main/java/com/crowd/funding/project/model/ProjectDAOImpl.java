@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +15,12 @@ public class ProjectDAOImpl implements ProjectDAO {
 	SqlSession sqlSession;
 
 	@Override
+	public void makerAdd(ProjectDTO dto) {
+		sqlSession.insert("project.makerInsert", dto);
+	}
+	
+	@Override
 	public void add(ProjectDTO dto) {
-		sqlSession.insert("project.maker",dto);
 		sqlSession.insert("project.add", dto);
 	}
 	
@@ -69,4 +74,5 @@ public class ProjectDAOImpl implements ProjectDAO {
 		sqlSession.update("project.request", pro_id);
 	}
 
+	
 }

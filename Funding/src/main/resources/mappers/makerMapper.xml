@@ -30,13 +30,19 @@
   </select>
   
   <select id="makerinfo" resultType="com.crowd.funding.maker.model.MakerDTO">
-  	select * from maker where mem_idx=#{mem_idx}
+  	<!-- select * from maker where mem_idx=#{mem_idx} -->
+  	<!-- 확인필요 -->
+  	프로젝트 번호에 맞는 메이커모든 메이커정보 선택
+  	select *
+  	from maker
+  	where maker_idx = #{maker_idx} <!-- 집어넣은 maker_idx값은  -->
   </select>
   
  
   <update id="infoup">
   	update maker
   		set maker_name=#{maker_name}, maker_phone=#{maker_phone}, maker_intro=#{maker_intro}
+  			maker_photo=#{maker_photo}> <!-- 주소 추가 -->
   		where mem_idx=#{mem_idx}
   </update>
   
