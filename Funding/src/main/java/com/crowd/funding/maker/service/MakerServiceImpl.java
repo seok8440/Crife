@@ -34,9 +34,9 @@ public class MakerServiceImpl implements MakerService {
 	}
 
 	@Override
-	public MakerDTO makerinfo(int mem_idx) throws Exception {
+	public MakerDTO makerinfo(int pro_id) throws Exception {
 		System.out.println("### makerService : makerinfo ###");
-		return maDAO.makerinfo(mem_idx);
+		return maDAO.makerinfo(pro_id);
 	}
 	
 
@@ -48,9 +48,9 @@ public class MakerServiceImpl implements MakerService {
 	}
 
 	@Override
-	public void makerinfoDEL(MakerDTO maDTO) throws Exception {
+	public void delete(int pro_id) throws Exception {
 		System.out.println("### makerService : makerinfoDEL ###");
-		maDAO.makerinfoDEL(maDTO);
+		maDAO.delete(pro_id);
 	}
 	
 	

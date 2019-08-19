@@ -42,50 +42,24 @@
 	width: 600px;
 	margin: 0 auto;
 }
-
 .table_view tfoot {
 	text-align: center;
 }
-
 .ok {
 	position: absolute;
 	right: 7%;
 	top: 25%;
 }
-
 p {
 	margin: 20px 0px;
 }
-
 #pro_summary {
 	resize: none;
 	width: 400px;
 	height: 100px;
 }
 </style>
-<script type="text/javascript">
-	$(function() {
 
-		$("#btn_up")
-				.click(
-						function() {
-							document.getElementById('makerform').action = "${path}/maker/maker_up?maker_idx=${maker.maker_idx}";
-							document.getElementById('makerform').submit();
-						});
-
-		$("#btn_del")
-				.click(
-						function() {
-							document.getElementById('makerform').action = "${path}/maker/maker_del?maker_idx=${maker.maker_idx}";
-							document.getElementById('makerform').submit();
-						});
-
-		$("#btn_ok").click(function() {
-			alert("승인요청이 되었습니다. 2주 안에 처리됩니다");
-			document.getElementById('ok').submit();
-		});
-	});
-</script>
 </head>
 <body>
 	<%@ include file="../include/navbar.jsp"%>
@@ -246,23 +220,19 @@ p {
 						</p>
 					</div>
 					<div class="tab-pane fade" id="maker">
-						<form id="makerform" action="/funding/maker/makerPOST"
-							method="post" enctype="multipart/form-data">
+						<form id="maker_form" action="${path}/maker/save4"
+							method="post" enctype="multipart/form-data" >
 
 							<table class="table_view">
-								<caption>
-									메이커 등록 <input type="text" name="mem_idx" id="mem_idx"
-										value="${login.mem_idx}">
-								</caption>
 								<tr>
 									<th scope="row">메이커 이름</th>
 									<td><input name="maker_name" id="maker_name" type="text"
-										placeholder="이름"></td>
+										value="${maker_detail.maker_name}"></td>
 								</tr>
 								<tr>
 									<th scope="row">메이커 전화번호</th>
 									<td><input name="maker_phone" id="maker_phone" type="text"
-										placeholder="전화번호"></td>
+										value="${maker_detail.maker_phone}"></td>
 								</tr>
 								<tr>
 									<th scope="row">주소</th>
@@ -271,14 +241,16 @@ p {
 								<tr>
 									<th scope="row">메이커 소개</th>
 									<td><input name="maker_intro" id="maker_intro" type="text"
-										placeholder="소개"></td>
+										value="${maker_detail.maker_intro}"></td>
 								</tr>
 								<tr>
 									<th scope="row">메이커 이미지</th>
-									<td><input type="file" name="maker_photo"></td>
+									<td>현재 파일 : ${maker_detail.maker_photo} &nbsp;<input type="file" name="file3" id="file3" size="50">
+										<input type="hidden" name="mem_idx" value="${login.mem_idx}">
+										<input type="hidden" name="pro_id" value="${detail.pro_id}"></td>
 								</tr>
 								<tr>
-									<th colspan="2"><button id="btnSave">저장하기</button></th>
+									<th colspan="2"><button id="save4">저장하기</button></th>
 								</tr>
 							</table>
 						</form>
@@ -312,12 +284,19 @@ p {
 			document.input_form.submit();
 			alert("저장되었습니다");
 		});
-
 		$('#save3').click(function() {
 			document.story_form.submit();
 			alert("저장되었습니다");
 		});
-
+		$('#save4').click(function() {
+			document.maker_form.submit();
+			alert("저장되었습니다");
+		});
+		
+		$("#btn_ok").click(function() {
+			alert("승인요청이 되었습니다. 2주 안에 처리됩니다");
+			document.getElementById('ok').submit();
+		});
 		$('#file2').summernote({
 			lang : 'ko-KR', // default: 'en-US'
 			tabsize : 2,
@@ -326,6 +305,4 @@ p {
 		});
 	});
 </script>
-
-
 </html>

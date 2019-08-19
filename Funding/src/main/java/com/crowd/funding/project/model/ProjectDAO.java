@@ -23,5 +23,7 @@ public interface ProjectDAO {
 	
 	void request(int pro_id);
 	
+	void makerAdd(ProjectDTO dto);
+	
 	void maker(ProjectDTO dto);
 }

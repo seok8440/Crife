@@ -24,6 +24,10 @@ public interface ProjectService {
 	void story_update(ProjectDTO dto);
 
 	void request(int pro_id);
+	
+	void makerAdd(ProjectDTO dto);
 
 	void maker(ProjectDTO dto);
+	
+	
 }

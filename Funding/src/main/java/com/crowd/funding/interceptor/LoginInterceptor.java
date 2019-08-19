@@ -1,23 +1,17 @@
 package com.crowd.funding.interceptor;
 
-import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.crowd.funding.maker.service.MakerService;
 import com.crowd.funding.member.model.MemberDTO;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter {
-
-	@Inject
-	MakerService maService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -66,9 +60,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 				System.out.println("#####로그인성공");
 				http.setAttribute("login", memDTO);
 
-				if (maService.idx(memDTO.getMem_idx()) != 0) {
-					http.setAttribute("maker_idx", maService.makeridx(memDTO.getMem_idx()));
-				}
 				if (request.getParameter("useCookie") != null) {
 					System.out.println("쿠키있음");
 					// 쿠키생성 변수 : loginCookie에 session의 아이디값 보관

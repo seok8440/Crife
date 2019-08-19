@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.crowd.funding.maker.service.MakerService;
 import com.crowd.funding.member.model.MemberDTO;
 import com.crowd.funding.project.model.ProjectDTO;
 import com.crowd.funding.project.service.ProjectService;
@@ -35,6 +36,9 @@ public class ProjectController {
 
 	@Inject
 	ProjectService projectService;
+	
+	@Inject
+	MakerService makerService;
 
 	// check.jsp로 이동
 	@RequestMapping("check")
@@ -52,33 +56,34 @@ public class ProjectController {
 
 	// input.jsp로 이동
 	@RequestMapping("add")
-	public String input(HttpSession session, MemberDTO mem, ProjectDTO dto, RedirectAttributes rttr, Model model) {
+	public String input(HttpSession session, ProjectDTO dto, RedirectAttributes rttr, Model model) {
 		// 로그인 상태일 때
 		if (session != null) {
-			
-			
+			projectService.makerAdd(dto);// 메이커생성
 			projectService.add(dto); // 프로젝트 생성
 			int pro_id = dto.getPro_id(); // 생성된 프로젝트 번호
 			int maker_idx = dto.getMem_idx(); // 생성된 메이커 번호
 			
-			rttr.addAttribute("pro_id", pro_id); // controller로 id값을 넘길 수 있게 설정
-			projectService.maker(dto);
+			rttr.addAttribute("pro_id", pro_id); // controller로 id값을 넘길 수 있게 설정                                                                                                                                                                   ㅍ
+			projectService.maker(dto); // 현재 생성된 프로젝트에 maker번호 추가해줌
 			return "redirect:/project/input_page"; // id값을 넘김
 		} else {
-			return "redirect:/project/login"; // 비로그인 상태일 때는 로그인 페이지로 이동
+			return "/user/login"; // 비로그인 상태일 때는 로그인 페이지로 이동
 		}
 	}
 	
 	// 위에 controller에서 redirect로 id값이 넘어옴 
 	@RequestMapping("input_page")
-	public String input_list(HttpSession session, ProjectDTO dto, @RequestParam int pro_id, Model model) {
+	public String input_list(HttpSession session, ProjectDTO dto, @RequestParam int pro_id, Model model) throws Exception {
 		model.addAttribute("detail", projectService.pro_detail(pro_id)); // 프로젝트 번호에 맞는 프로젝트 정보를 가져옴
+		model.addAttribute("maker_detail", makerService.makerinfo(dto.getPro_id()));
 		return "project/input"; //input.jsp로 이동
 	}
 
 	// input_update.jsp에서 저장하기버튼 클릭 시
 	@RequestMapping("save1")
-	public String update(HttpSession session, ProjectDTO dto, Model model, MemberDTO mem) {
+	public String update(HttpSession session, ProjectDTO dto, Model model, MemberDTO mem) throws Exception {
+		// 공백일 경우 null 셋팅
 		if(dto.getPro_start().equals("") || dto.getPro_end().equals("")) {
 			dto.setPro_start(null);
 			dto.setPro_end(null);
@@ -104,46 +109,42 @@ public class ProjectController {
 			ProjectDTO dto2 = projectService.pro_detail(dto.getPro_id());
 			dto.setPro_imageURL(dto2.getPro_imageURL());
 		}
-		// 상품정보 수정
 		projectService.save1(dto);
 		model.addAttribute("id", session.getAttribute("login"));
 		model.addAttribute("detail", projectService.pro_detail(dto.getPro_id()));
+		model.addAttribute("maker_detail", makerService.makerinfo(dto.getPro_id()));
 		return "project/input";
 	}
 	
 	// input_update로 이동
 	@RequestMapping("update_page")
-	public String update_page(Model model, ProjectDTO dto) { 
+	public String update_page(Model model, ProjectDTO dto) throws Exception { 
 		model.addAttribute("detail",projectService.pro_detail(dto.getPro_id()));
+		model.addAttribute("maker_detail", makerService.makerinfo(dto.getPro_id()));
 		return "project/input";
 	}
 	
 	@RequestMapping("story/{pro_id}")
-	public ModelAndView storypage(@PathVariable("pro_id") int pro_id, ModelAndView mav) {
+	public ModelAndView storypage(@PathVariable("pro_id") int pro_id, ModelAndView mav, Model model) throws Exception {
 		mav.setViewName("project/story_detail");
+		model.addAttribute("maker_detail", makerService.makerinfo(pro_id));
 		mav.addObject("detail", projectService.pro_detail(pro_id));
 		return mav;
 	}
 	
-	// 수정하기 버튼 눌렀을 때 수정폼으로가는 매핑
-	/*
-	 * @RequestMapping("update/{pro_id}") public ModelAndView
-	 * updatepage(@PathVariable("pro_id") int pro_id, ModelAndView mav) {
-	 * mav.setViewName("project/input_update"); mav.addObject("detail",
-	 * projectService.pro_detail(pro_id)); return mav; }
-	 */
-	
 	@RequestMapping("update/{pro_id}")
-	public ModelAndView updatepage(@PathVariable("pro_id") int pro_id, ModelAndView mav) {
+	public ModelAndView updatepage(@PathVariable("pro_id") int pro_id, ModelAndView mav, Model model) throws Exception {
 		mav.setViewName("project/input");
 		mav.addObject("detail", projectService.pro_detail(pro_id));
+		model.addAttribute("maker_detail", makerService.makerinfo(pro_id));
 		return mav;
 	}
 	
 	@RequestMapping("detail/{pro_id}")
-	public ModelAndView detail(@PathVariable("pro_id") int pro_id, ModelAndView mav) {
+	public ModelAndView detail(@PathVariable("pro_id") int pro_id, ModelAndView mav, Model model) throws Exception {
 		mav.setViewName("project/pro_detail");
 		mav.addObject("dto", projectService.pro_detail(pro_id));
+		model.addAttribute("maker_detail", makerService.makerinfo(pro_id));
 		return mav;
 	}
 	
@@ -157,48 +158,19 @@ public class ProjectController {
 		return mav;
 	}
 	
+	// 프로젝트 삭제, 메이커 삭제
 	@RequestMapping("my_delete")
-	public String my_delete(int pro_id) {
+	public String my_delete(int pro_id) throws Exception {
+		makerService.delete(pro_id);
 		projectService.my_delete(pro_id);
 		return "redirect:/project/my_pro";
 	}
 	
-	// update >>> detail 이동
-	@RequestMapping("story/detail")
-	public String my_story(Model model, ProjectDTO dto) {
-		String filename = "-";
-		if (!dto.getFile2().isEmpty()) {
-			filename = dto.getFile2().getOriginalFilename();
-			try {
-				String path ="D:\\JavaBigData2th\\mywork_spring\\.metadata\\.plugins\\"
-						+ "org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Funding\\resources\\images\\";
-				new File(path).mkdir();
-				dto.getFile2().transferTo(new File(path + filename));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			dto.setPro_content(filename);
-		} else {
-			ProjectDTO dto2 = projectService.pro_detail(dto.getPro_id());
-			dto.setPro_content(dto2.getPro_content());
-		}
-		projectService.story_update(dto);
-		model.addAttribute("detail",projectService.pro_detail(dto.getPro_id()));
-		return "project/input";
-	}
-	
-	// detail >>> update 이동
-	@RequestMapping("story/update")
-	public String story_save(Model model, ProjectDTO dto) {
-		System.out.println("detail >>> update "+dto.getPro_id());
-		model.addAttribute("detail",projectService.pro_detail(dto.getPro_id()));
-		return "project/story_update";
-	}
-	
 	@RequestMapping("project/request")
-	public String request(Model model, int pro_id) {
+	public String request(Model model, int pro_id) throws Exception {
 		projectService.request(pro_id);
 		model.addAttribute("detail",projectService.pro_detail(pro_id));
+		model.addAttribute("maker_detail", makerService.makerinfo(pro_id));
 		return "project/input";
 	}
 

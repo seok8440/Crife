@@ -36,6 +36,7 @@
 			<td>목표금액 : <fmt:formatNumber value="${dto.pro_price}"/>원&nbsp;
 			<form name="my_form" method="post" action="${path}/project/update_page" id="my_form">
 				<input type="hidden" name="pro_id" value="${dto.pro_id}">
+				<input type="hidden" name="mem_idx" value="${login.mem_idx}">
 				<input type="button" value="수정하기" class="update">
 				<input type="button" value="삭제하기" class="delete">
 			</form></td>
@@ -57,7 +58,7 @@
 			e.preventDefault(); // 버튼 기본 이벤트를 막음
 			var result = confirm('정말 삭제하시겠습니까?');
 			if(result) { 
-				$(this).parent().attr('action','${path}/project/my_delete').submit();
+				$(this).parent().attr('action','${path}/project/my_delete/{}').submit();
 				alert("삭제되었습니다");
 			}
 		});

@@ -1,5 +1,7 @@
 package com.crowd.funding.maker.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
@@ -19,5 +21,5 @@ public class MakerDTO {
 	private String maker_photo;
 
 	private int mem_idx;
-
+	private MultipartFile file3;
 }

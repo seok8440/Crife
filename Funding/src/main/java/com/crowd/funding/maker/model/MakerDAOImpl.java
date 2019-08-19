@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.crowd.funding.member.model.MemberDTO;
+
 
 @Repository
 public class MakerDAOImpl implements MakerDAO {
@@ -34,9 +34,9 @@ public class MakerDAOImpl implements MakerDAO {
 	}
 
 	@Override
-	public MakerDTO makerinfo(int mem_idx) throws Exception {
+	public MakerDTO makerinfo(int pro_id) throws Exception {
 		System.out.println("### makerDAO : makerinfo 메이커 정보 ####");
-		return sql.selectOne("maker.makerinfo", mem_idx);
+		return sql.selectOne("maker.makerinfo", pro_id);
 	}
 
 	@Override
@@ -46,10 +46,9 @@ public class MakerDAOImpl implements MakerDAO {
 	}
 
 	@Override
-	public void makerinfoDEL(MakerDTO maDTO) throws Exception {
+	public void delete(int pro_id) throws Exception {
 		System.out.println("### makerDAO : makerinfoDEL 메이커 정보 삭제 ####");
-		sql.delete("maker.infodel", maDTO.getMem_idx());
-		sql.update("maker.delmemtype", maDTO.getMem_idx());
+		sql.delete("maker.delete", pro_id);
 	}
 
 }

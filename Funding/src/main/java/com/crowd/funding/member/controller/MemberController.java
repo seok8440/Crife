@@ -259,7 +259,7 @@ public class MemberController {
 		String hashedPW = BCrypt.hashpw(memDTO.getMem_password(), BCrypt.gensalt());
 		memDTO.setMem_password(hashedPW);
 
-		memService.myinfoUP(memDTO);
+		memService.myinfoUP(memDTO); 
 
 		
 		return "redirect:/user/myinfo?mem_idx=" + memDTO.getMem_idx();

@@ -4,14 +4,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
-  <mapper  namespace="maker">
-  
-  <!-- maker 등록 & mem_type을 메이커로 변경 &maker_idx 선택-->
-  <!-- useGeneratedKeys :  / keyProperty : auto_increment하는 값 -->
-  <insert id="join" useGeneratedKeys="true" keyProperty="maker_idx">
-  	insert into maker(maker_name, maker_phone, maker_intro,mem_idx) 
-  			values(#{maker_name}, #{maker_phone},#{maker_intro},#{mem_idx})
-  </insert>
+  <mapper namespace="maker">
   
   <update id="memtype">
   	update member set mem_type=1 where mem_idx=#{mem_idx}
@@ -30,21 +23,29 @@
   </select>
   
   <select id="makerinfo" resultType="com.crowd.funding.maker.model.MakerDTO">
-  	select * from maker where mem_idx=#{mem_idx}
+  	<!-- select * from maker where mem_idx=#{mem_idx} -->
+  	select * 
+  	from maker as mak, 
+  	(select pro_id, mem_idx, maker_idx from project where pro_id=#{pro_id}) as pro
+  	where mak.maker_idx = pro.maker_idx
   </select>
   
  
   <update id="infoup">
   	update maker
-  		set maker_name=#{maker_name}, maker_phone=#{maker_phone}, maker_intro=#{maker_intro}
-  		where mem_idx=#{mem_idx}
+  	set maker_name=#{maker_name}, maker_phone=#{maker_phone}, maker_intro=#{maker_intro},
+  			maker_photo=#{maker_photo}
+  	where mem_idx=#{mem_idx}
   </update>
   
   
   <!-- maker 정보 삭제 & mem_type을 일반회원으로 변경 -->
-  <delete id="infodel">
-  	delete from maker where mem_idx=#{mem_idx}
+  <delete id="delete">
+  	delete from maker as mak, 
+  	(select pro_id, mem_idx, maker_idx from project where pro_id=#{pro_id}) as pro
+  	where mak.maker_idx = pro.maker_idx
   </delete>
+  
   <update id="delmemtype">
   	update member set mem_type=0 where mem_idx=#{mem_idx}
   </update>
