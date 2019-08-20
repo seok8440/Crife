@@ -29,5 +29,4 @@ public interface ProjectService {
 
 	void maker(ProjectDTO dto);
 	
-	
 }

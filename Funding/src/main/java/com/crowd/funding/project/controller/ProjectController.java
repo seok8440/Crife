@@ -83,6 +83,7 @@ public class ProjectController {
 	// input_update.jsp에서 저장하기버튼 클릭 시
 	@RequestMapping("save1")
 	public String update(HttpSession session, ProjectDTO dto, Model model, MemberDTO mem) throws Exception {
+
 		// 공백일 경우 null 셋팅
 		if(dto.getPro_start().equals("") || dto.getPro_end().equals("")) {
 			dto.setPro_start(null);
@@ -109,6 +110,37 @@ public class ProjectController {
 			ProjectDTO dto2 = projectService.pro_detail(dto.getPro_id());
 			dto.setPro_imageURL(dto2.getPro_imageURL());
 		}
+		projectService.save1(dto);
+		model.addAttribute("id", session.getAttribute("login"));
+		model.addAttribute("detail", projectService.pro_detail(dto.getPro_id()));
+		return "project/input";
+	}
+	
+	// maker에서 저장하기 클릭 시 
+	@RequestMapping("save4")
+	public String maker_update(HttpSession session, ProjectDTO dto, Model model) throws Exception {
+		String filename = "-";
+		// 새로운 첨부 파일이 있으면
+		if (!dto.getFile2().isEmpty()) {
+			// 첨부 파일의 이름
+			filename = dto.getFile2().getOriginalFilename();
+			try {
+				String path ="D:\\JavaBigData2th\\mywork_spring\\.metadata\\.plugins\\"
+						+ "org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Funding\\resources\\images\\";
+				// 디렉토리가 존재하지 않으면 생성
+				new File(path).mkdir();
+				// 임시 디렉토리에 저장된 첨부파일을 이동
+				dto.getFile2().transferTo(new File(path + filename));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			dto.setPro_imageURL(filename);
+		} else { // 새로운 첨부 파일이 없을 때
+			// 기존에 첨부한 파일 정보를 가져옴
+			ProjectDTO dto2 = projectService.pro_detail(dto.getPro_id());
+			dto.setPro_imageURL(dto2.getPro_imageURL());
+		}
+
 		projectService.save1(dto);
 		model.addAttribute("id", session.getAttribute("login"));
 		model.addAttribute("detail", projectService.pro_detail(dto.getPro_id()));

@@ -245,8 +245,12 @@ p {
 								</tr>
 								<tr>
 									<th scope="row">메이커 이미지</th>
+<<<<<<< HEAD
 									<td>현재 파일 : ${maker_detail.maker_photo} &nbsp;<input type="file" name="file3" id="file3" size="50">
 										<input type="hidden" name="mem_idx" value="${login.mem_idx}">
+=======
+									<td>현재 파일 : ${maker_detail.maker_photo} &nbsp;<input type="file" name="maker_photo" size="50">
+>>>>>>> refs/remotes/origin/master
 										<input type="hidden" name="pro_id" value="${detail.pro_id}"></td>
 								</tr>
 								<tr>
@@ -288,6 +292,7 @@ p {
 			document.story_form.submit();
 			alert("저장되었습니다");
 		});
+<<<<<<< HEAD
 		$('#save4').click(function() {
 			document.maker_form.submit();
 			alert("저장되었습니다");
@@ -297,6 +302,19 @@ p {
 			alert("승인요청이 되었습니다. 2주 안에 처리됩니다");
 			document.getElementById('ok').submit();
 		});
+=======
+
+		$('#save4').click(function() {
+			document.story_form.submit();
+			alert("저장되었습니다");
+		});
+		
+		$("#btn_ok").click(function() {
+			alert("승인요청이 되었습니다. 2주 안에 처리됩니다");
+			document.getElementById('ok').submit();
+		});
+
+>>>>>>> refs/remotes/origin/master
 		$('#file2').summernote({
 			lang : 'ko-KR', // default: 'en-US'
 			tabsize : 2,

@@ -74,5 +74,4 @@ public class ProjectDAOImpl implements ProjectDAO {
 		sqlSession.update("project.request", pro_id);
 	}
 
-	
 }

@@ -9,10 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.crowd.funding.maker.model.MakerDTO;
 import com.crowd.funding.maker.service.MakerService;
-import com.crowd.funding.project.model.ProjectDTO;
 import com.crowd.funding.project.service.ProjectService;
 
 @Controller
@@ -25,18 +25,25 @@ public class MakerController {
 	@Inject
 	ProjectService projectService;
 
-	// 메이커 정보 - 수정
-	@RequestMapping(value = "save4", method = RequestMethod.POST)
-	public String makerinfoUP(MakerDTO dto, HttpSession session, Model model, ProjectDTO pro) throws Exception {
-		System.out.println("%%% 메이커 정보 수정 : maker_idx : " + dto.getMaker_idx() + "%%%");
-		System.out.println("prorororo : " + pro.getPro_id());
+	//메이커 정보 뷰
+	@RequestMapping(value = "/makerinfo", method = RequestMethod.GET)
+	public String makerinfoGET(@RequestParam int mem_idx, Model model) throws Exception{
+		model.addAttribute("maker", maService.makerinfo(mem_idx));
+		return "maker/makerinfo";
+	}
+	
+	
+	//메이커 정보 - 수정
+	@RequestMapping(value = "/save4", method = RequestMethod.POST)
+	public String makerinfoUP(MakerDTO dto, HttpSession session, Model model) throws Exception{
+		System.out.println("%%% 메이커 정보 수정 : maker_idx : "+ dto.getMaker_idx()+"%%%");
 		String filename = "-";
 		// 새로운 첨부 파일이 있으면
 		if (!dto.getFile3().isEmpty()) {
 			// 첨부 파일의 이름
 			filename = dto.getFile3().getOriginalFilename();
 			try {
-				String path = "D:\\JavaBigData2th\\mywork_spring\\.metadata\\.plugins\\"
+				String path ="D:\\JavaBigData2th\\mywork_spring\\.metadata\\.plugins\\"
 						+ "org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Funding\\resources\\images\\";
 				// 디렉토리가 존재하지 않으면 생성
 				new File(path).mkdir();
@@ -48,13 +55,12 @@ public class MakerController {
 			dto.setMaker_photo(filename);
 		} else { // 새로운 첨부 파일이 없을 때
 			// 기존에 첨부한 파일 정보를 가져옴
-			MakerDTO dto2 = maService.makerinfo(pro.getPro_id());
+			MakerDTO dto2 = maService.makerinfo(dto.getMem_idx());
 			dto.setMaker_photo(dto2.getMaker_photo());
 		}
 		maService.makerinfoUP(dto);
 		model.addAttribute("id", session.getAttribute("login"));
-		model.addAttribute("maker_detail", maService.makerinfo(pro.getPro_id()));
-		model.addAttribute("detail", projectService.pro_detail(pro.getPro_id()));
+		model.addAttribute("maker_detail", maService.makerinfo(dto.getMaker_idx()));
 		return "project/input";
 	}
 

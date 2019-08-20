@@ -22,4 +22,5 @@ public class MakerDTO {
 
 	private int mem_idx;
 	private MultipartFile file3;
+
 }
