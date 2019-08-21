@@ -10,6 +10,6 @@ public interface MakerService {
 	MakerDTO makerinfo(int pro_id) throws Exception;
 
 	void makerinfoUP(MakerDTO maDTO) throws Exception;
-	void delete(int pro_id) throws Exception;
+	void delete(int maker_idx) throws Exception;
 
 }

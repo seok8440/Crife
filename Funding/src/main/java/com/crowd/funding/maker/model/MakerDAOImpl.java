@@ -46,9 +46,9 @@ public class MakerDAOImpl implements MakerDAO {
 	}
 
 	@Override
-	public void delete(int pro_id) throws Exception {
+	public void delete(int maker_idx) throws Exception {
 		System.out.println("### makerDAO : makerinfoDEL 메이커 정보 삭제 ####");
-		sql.delete("maker.delete", pro_id);
+		sql.delete("maker.delete", maker_idx);
 	}
 
 }

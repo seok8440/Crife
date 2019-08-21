@@ -70,10 +70,10 @@
 	
 	<!-- 파일 업로드 -->
 	<beans:bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
-		<beans:property value="10485760" name="maxUploadSize"/>
-	</beans:bean>
-	<beans:bean class="java.lang.String" id="uploadPath">
-		<beans:constructor-arg value="C:/upload"/>	<!-- value값에 파일업로드시 저장할 폴더 경로 지정 -->
+		<!-- max upload size in bytes -->
+		<beans:property value="20971520" name="maxUploadSize"/>
+        <!-- max size of file in memory (in bytes) -->
+		<beans:property value="1048576" name="maxInMemorySize"/>
 	</beans:bean>
 
 	<!-- oauth2 login -->

@@ -48,9 +48,9 @@ public class MakerServiceImpl implements MakerService {
 	}
 
 	@Override
-	public void delete(int pro_id) throws Exception {
+	public void delete(int maker_idx) throws Exception {
 		System.out.println("### makerService : makerinfoDEL ###");
-		maDAO.delete(pro_id);
+		maDAO.delete(maker_idx);
 	}
 	
 	

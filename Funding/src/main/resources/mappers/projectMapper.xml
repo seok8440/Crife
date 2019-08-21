@@ -33,11 +33,11 @@
 	</update>
 	
 	<select id ="pro_list" resultType="com.crowd.funding.project.model.ProjectDTO">
-		select *, TIMESTAMPDIFF(DAY, CURDATE(), `pro_end`) day from project order by pro_id desc;
+		select *, TIMESTAMPDIFF(DAY, CURDATE(), `pro_end`) day from project order by pro_id desc
 	</select>
 	
 	<select id ="pro_detail" resultType="com.crowd.funding.project.model.ProjectDTO">
-		select * from project where pro_id = #{pro_id}
+		select *, TIMESTAMPDIFF(DAY, CURDATE(), `pro_end`) day from project where pro_id = #{pro_id}
 	</select>
 	
 	<select id ="pro_name" resultType="String">

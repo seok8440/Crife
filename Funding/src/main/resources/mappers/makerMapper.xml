@@ -35,17 +35,17 @@
   	update maker
   	set maker_name=#{maker_name}, maker_phone=#{maker_phone}, maker_intro=#{maker_intro},
   			maker_photo=#{maker_photo}
-  	where mem_idx=#{mem_idx}
+  	where maker_idx=#{maker_idx}
   </update>
   
   
-  <!-- maker 정보 삭제 & mem_type을 일반회원으로 변경 -->
+  <!-- maker 정보 삭제 -->
   <delete id="delete">
-  	delete from maker as mak, 
-  	(select pro_id, mem_idx, maker_idx from project where pro_id=#{pro_id}) as pro
-  	where mak.maker_idx = pro.maker_idx
+  	delete from maker
+  	where maker_idx=#{maker_idx}
   </delete>
   
+   <!-- & mem_type을 일반회원으로 변경 -->
   <update id="delmemtype">
   	update member set mem_type=0 where mem_idx=#{mem_idx}
   </update>

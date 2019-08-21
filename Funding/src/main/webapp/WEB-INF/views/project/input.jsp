@@ -8,13 +8,10 @@
 <title>크라이프 : 내 프로젝트 수정</title>
 <%@ include file="../include/header.jsp"%>
 
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <!-- 달력관련 css파일들을 불러옵니다. -->
-<link rel="stylesheet"
-	href="${path}/resources/pickadate/lib/themes/default.css">
-<link rel="stylesheet"
-	href="${path}/resources/pickadate/lib/themes/default.date.css">
+<link rel="stylesheet" href="${path}/resources/pickadate/lib/themes/default.css">
+<link rel="stylesheet" href="${path}/resources/pickadate/lib/themes/default.date.css">
 <!-- 달력관련 js파일들을 불러옵니다. -->
 <script src="${path}/resources/pickadate/lib/picker.js"></script>
 <script>
@@ -28,15 +25,14 @@
 <script>
 	var pk = jQuery.noConflict();
 </script>
-<%-- <!-- summernote -->
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-	
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script>
-<!-- include summernote-ko-KR -->
-	<script src="${path}/resources/summernote/lang/summernote-ko-KR.js"></script>
-	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css"rel="stylesheet">
-	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet"> --%>
+<script type="text/javascript" src="${path}/resources/editor/js/HuskyEZCreator.js" charset="utf-8"></script>
+<script>
+	var ed = jQuery.noConflict();
+</script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.js"></script>
+<script>
+	var ed = jQuery.noConflict();
+</script>
 <style>
 .table_view {
 	width: 600px;
@@ -205,15 +201,16 @@ p {
 					</div>
 					<div class="tab-pane fade" id="story">
 						<p>
-						<form name="story_form" method="post"
-							action="${path}/project/story/detail"
-							enctype="multipart/form-data">
-							소개 영상<br> 유튜브 동영상 주소를 적어주세요<br> <input type="text"
-								name="pro_video" value="${detail.pro_video}" size="50"><br>
-							간단설명<br> 프로젝트에 대한 간단한 설명을 해주세요<br>
+						<form id="story_form" name="story_form" method="post" action="${path}/project/save3">
+							소개 영상<br>
+							유튜브 동영상 주소를 적어주세요<br>
+							동영상을 등록하지 않으면 메인사진이 올라갑니다<br>
+							<input type="text" name="pro_video" value="${detail.pro_video}" size="50"><br>
+							<br>스토리<br>
+							<textarea rows="10" cols="30" id="ir1" name="pro_content" style="width:766px; height:412px; ">${detail.pro_content}</textarea><br>
+							간단설명<br>
+							프로젝트에 대한 간단한 설명을 해주세요<br>
 							<textarea id="pro_summary" name="pro_summary">${detail.pro_summary}</textarea>
-							<br> 스토리<br>
-							<textarea id="file2" name="file2">${datail.pro_content}</textarea>
 							<input type="hidden" name="pro_id" value="${detail.pro_id}">
 							<input type="button" value="저장하기" id='save3'>
 						</form>
@@ -245,12 +242,9 @@ p {
 								</tr>
 								<tr>
 									<th scope="row">메이커 이미지</th>
-<<<<<<< HEAD
 									<td>현재 파일 : ${maker_detail.maker_photo} &nbsp;<input type="file" name="file3" id="file3" size="50">
 										<input type="hidden" name="mem_idx" value="${login.mem_idx}">
-=======
-									<td>현재 파일 : ${maker_detail.maker_photo} &nbsp;<input type="file" name="maker_photo" size="50">
->>>>>>> refs/remotes/origin/master
+										<input type="hidden" name="maker_idx" value="${maker_detail.maker_idx}">
 										<input type="hidden" name="pro_id" value="${detail.pro_id}"></td>
 								</tr>
 								<tr>
@@ -263,11 +257,9 @@ p {
 			</div>
 		</div>
 	</div>
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-	<script
-		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
 </body>
 
@@ -288,11 +280,12 @@ p {
 			document.input_form.submit();
 			alert("저장되었습니다");
 		});
-		$('#save3').click(function() {
-			document.story_form.submit();
-			alert("저장되었습니다");
-		});
-<<<<<<< HEAD
+		
+		$("#save3").click(function() 
+			{ oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
+			$("#story_form").submit();
+		})
+		
 		$('#save4').click(function() {
 			document.maker_form.submit();
 			alert("저장되었습니다");
@@ -302,24 +295,28 @@ p {
 			alert("승인요청이 되었습니다. 2주 안에 처리됩니다");
 			document.getElementById('ok').submit();
 		});
-=======
+	});
+</script>
+<script type="text/javascript">
+	var oEditors = [];
+	ed(function() {
+		nhn.husky.EZCreator.createInIFrame({
+			oAppRef : oEditors,
+			elPlaceHolder : "ir1",
+			//SmartEditor2Skin.html 파일이 존재하는 경로
+			sSkinURI : "${path}/resources/editor/SmartEditor2Skin.html",
+			htParams : {
+				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+				bUseToolbar : true,
+				// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+				bUseVerticalResizer : true,
+				// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+				bUseModeChanger : true,
+				fOnBeforeUnload : function() {
 
-		$('#save4').click(function() {
-			document.story_form.submit();
-			alert("저장되었습니다");
-		});
-		
-		$("#btn_ok").click(function() {
-			alert("승인요청이 되었습니다. 2주 안에 처리됩니다");
-			document.getElementById('ok').submit();
-		});
-
->>>>>>> refs/remotes/origin/master
-		$('#file2').summernote({
-			lang : 'ko-KR', // default: 'en-US'
-			tabsize : 2,
-			width : 800,
-			height : 500
+				}
+			},
+			fCreator : "createSEditor2"
 		});
 	});
 </script>
