@@ -1,91 +1,66 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>크라이프 : 내 프로젝트 수정</title>
-<%@ include file="../include/header.jsp"%>
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-<!-- 달력관련 css파일들을 불러옵니다. -->
+<!DOCTYPE html>
+<html>
+<head>
+<title>크라우디 : 내 프로젝트 수정</title>
+<%@ include file="../include/header.jsp"%>
+<!-- 탭 관련 css,js -->
+<script src="${path}/resources/js/tabcontent.js" type="text/javascript"></script>
+<link href="${path}/resources/css/tabcontent.css" rel="stylesheet"type="text/css" />
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+<!-- parsley 유효성 검사 js.css -->
+<script src="${path}/resources/js/parsley.min.js"></script>
+<script src="${path}/resources/js/ko.js"></script>
+<link href="${path}/resources/css/parsley.css" rel="stylesheet"type="text/css" />
+
+<!-- 달력관련 css-->
 <link rel="stylesheet" href="${path}/resources/pickadate/lib/themes/default.css">
 <link rel="stylesheet" href="${path}/resources/pickadate/lib/themes/default.date.css">
-<!-- 달력관련 js파일들을 불러옵니다. -->
+<!-- 달력관련 js-->
 <script src="${path}/resources/pickadate/lib/picker.js"></script>
-<script>
-	var pk = jQuery.noConflict();
-</script>
 <script src="${path}/resources/pickadate/lib/picker.date.js"></script>
-<script>
-	var pk = jQuery.noConflict();
-</script>
 <script src="${path}/resources/pickadate/lib/legacy.js"></script>
-<script>
+<script type="text/javascript">
 	var pk = jQuery.noConflict();
 </script>
-<script type="text/javascript" src="${path}/resources/editor/js/HuskyEZCreator.js" charset="utf-8"></script>
-<script>
-	var ed = jQuery.noConflict();
-</script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.js"></script>
-<script>
-	var ed = jQuery.noConflict();
-</script>
-<style>
-.table_view {
-	width: 600px;
-	margin: 0 auto;
-}
-.table_view tfoot {
-	text-align: center;
-}
-.ok {
-	position: absolute;
-	right: 7%;
-	top: 25%;
-}
-p {
-	margin: 20px 0px;
-}
-#pro_summary {
-	resize: none;
-	width: 400px;
-	height: 100px;
-}
-</style>
 
+<!-- summernote관련 css/js -->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+<!-- summernote관련 css/js -->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script>
 </head>
-<body>
-	<%@ include file="../include/navbar.jsp"%>
+
+<body style="font-family: 'Nanum Gothic', sans-serif;">
+<%@ include file="../include/navbar.jsp"%>
+	<!-- 승인요청 버튼 폼 -->
 	<form id="ok" name="ok" action="${path}/project/request" method="post">
 		<input type="hidden" name="pro_id" value="${detail.pro_id}">
 		<div class="ok">
 			<button id="btn_ok" type="button" class="btn btn-outline-primary">승인요청</button>
 		</div>
 	</form>
-	<div class="container">
-		<div class="row">
-			<div class="col">
-				<ul class="nav nav-tabs">
-					<li class="nav-item"><a class="nav-link active"
-						data-toggle="tab" href="#basic">기본정보</a></li>
-					<li class="nav-item"><a class="nav-link" data-toggle="tab"
-						href="#reward">리워드</a></li>
-					<li class="nav-item"><a class="nav-link" data-toggle="tab"
-						href="#story">스토리</a></li>
-					<li class="nav-item"><a class="nav-link" data-toggle="tab"
-						href="#maker">메이커</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade show active" id="basic">
-						<p>
-						<form name="input_form" enctype="multipart/form-data"
-							method="post" action="${path}/project/save1">
-							<table>
+
+	<div style="width: 800px; height:800px; margin: 0 auto; padding: 120px 0 40px; font-family: 'Nanum Gothic', sans-serif;">
+		<ul class="tabs" data-persist="true">
+			<li><a href="#view1">기본정보</a></li>
+			<li><a href="#view2">리워드</a></li>
+			<li><a href="#view3">스토리</a></li>
+			<li><a href="#view4">메이커</a></li>
+		</ul>
+		<div class="tabcontents">
+			<div id="view1">
+				<p><form name="input_form" enctype="multipart/form-data" method="post" class="input_form"
+					action="${path}/project/save1" data-parsley-validate>
+					<table>
 								<tr>
-									<td>카테고리</td>
+									<td style="font-weight:bold;">카테고리</td>
 								</tr>
 								<tr>
 									<td>오픈 후, 노출될 카테고리를 선택해 주세요.</td>
@@ -93,40 +68,39 @@ p {
 								<tr>
 									<td><select id="pro_category" name="pro_category">
 											<option value=""
-												<c:out value="${detail.pro_category == null ? 'selected' : ''}"/>>프로젝트
-												카테고리</option>
+										<c:out value="${detail.pro_category == null ? 'selected' : ''}"/>>프로젝트카테고리</option>
 											<option value="1"
-												<c:out value="${detail.pro_category eq '1' ? 'selected' : ''}"/>>테크·가전</option>
+										<c:out value="${detail.pro_category eq '1' ? 'selected' : ''}"/>>테크·가전</option>
 											<option value="2"
-												<c:out value="${detail.pro_category eq '2' ? 'selected' : ''}"/>>패션·잡화</option>
+										<c:out value="${detail.pro_category eq '2' ? 'selected' : ''}"/>>패션·잡화</option>
 											<option value="3"
-												<c:out value="${detail.pro_category eq '3' ? 'selected' : ''}"/>>뷰티</option>
+										<c:out value="${detail.pro_category eq '3' ? 'selected' : ''}"/>>뷰티</option>
 											<option value="4"
-												<c:out value="${detail.pro_category eq '4' ? 'selected' : ''}"/>>푸드</option>
+										<c:out value="${detail.pro_category eq '4' ? 'selected' : ''}"/>>푸드</option>
 											<option value="5"
-												<c:out value="${detail.pro_category eq '5' ? 'selected' : ''}"/>>홈리빙</option>
+										<c:out value="${detail.pro_category eq '5' ? 'selected' : ''}"/>>홈리빙</option>
 											<option value="6"
-												<c:out value="${detail.pro_category eq '6' ? 'selected' : ''}"/>>디자인소품</option>
+										<c:out value="${detail.pro_category eq '6' ? 'selected' : ''}"/>>디자인소품</option>
 											<option value="7"
-												<c:out value="${detail.pro_category eq '7' ? 'selected' : ''}"/>>여행·레저</option>
+										<c:out value="${detail.pro_category eq '7' ? 'selected' : ''}"/>>여행·레저</option>
 											<option value="8"
-												<c:out value="${detail.pro_category eq '8' ? 'selected' : ''}"/>>스포츠·모빌리티</option>
+										<c:out value="${detail.pro_category eq '8' ? 'selected' : ''}"/>>스포츠·모빌리티</option>
 											<option value="9"
-												<c:out value="${detail.pro_category eq '9' ? 'selected' : ''}"/>>반려동물</option>
+										<c:out value="${detail.pro_category eq '9' ? 'selected' : ''}"/>>반려동물</option>
 											<option value="10"
-												<c:out value="${detail.pro_category eq '10' ? 'selected' : ''}"/>>모임</option>
+										<c:out value="${detail.pro_category eq '10' ? 'selected' : ''}"/>>모임</option>
 											<option value="11"
-												<c:out value="${detail.pro_category eq '11' ? 'selected' : ''}"/>>공연·컬쳐</option>
+										<c:out value="${detail.pro_category eq '11' ? 'selected' : ''}"/>>공연·컬쳐</option>
 											<option value="12"
-												<c:out value="${detail.pro_category eq '12' ? 'selected' : ''}"/>>소셜·캠페인</option>
+										<c:out value="${detail.pro_category eq '12' ? 'selected' : ''}"/>>소셜·캠페인</option>
 											<option value="13"
-												<c:out value="${detail.pro_category eq '13' ? 'selected' : ''}"/>>교육·키즈</option>
+										<c:out value="${detail.pro_category eq '13' ? 'selected' : ''}"/>>교육·키즈</option>
 											<option value="14"
-												<c:out value="${detail.pro_category eq '14' ? 'selected' : ''}"/>>게임·취미</option>
+										<c:out value="${detail.pro_category eq '14' ? 'selected' : ''}"/>>게임·취미</option>
 											<option value="15"
-												<c:out value="${detail.pro_category eq '15' ? 'selected' : ''}"/>>출판</option>
+										<c:out value="${detail.pro_category eq '15' ? 'selected' : ''}"/>>출판</option>
 											<option value="16"
-												<c:out value="${detail.pro_category eq '16' ? 'selected' : ''}"/>>기부·후원</option>
+										<c:out value="${detail.pro_category eq '16' ? 'selected' : ''}"/>>기부·후원</option>
 									</select></td>
 								</tr>
 								<tr>
@@ -136,8 +110,7 @@ p {
 									<td>프로젝트의 핵심 내용을 담을 수 있고 간결한 제목을 정해주세요.</td>
 								</tr>
 								<tr>
-									<td><input type="text" id="pro_name" name="pro_name"
-										value="${detail.pro_name}"></td>
+									<td><input type="text" id="pro_name" name="pro_name" value="${detail.pro_name}"></td>
 								</tr>
 								<tr>
 									<td>프로젝트 키워드</td>
@@ -146,12 +119,12 @@ p {
 									<td>제목 외에도 키워드 검색 시 검색 결과에 프로젝트가 나타납니다.</td>
 								</tr>
 								<tr>
-									<td>#<input type="text" name="pro_keyword1"
-										id="pro_keyword1" value="${detail.pro_keyword1}">&nbsp;
-										#<input type="text" name="pro_keyword2" id="pro_keyword2"
-										value="${detail.pro_keyword2}">&nbsp; #<input
-										type="text" name="pro_keyword3" id="pro_keyword3"
-										value="${detail.pro_keyword3}"></td>
+									<td>#<input type="text" name="pro_keyword1"id="pro_keyword1" value="${detail.pro_keyword1}"
+											data-parsley-length="[0, 5]">&nbsp;
+										#<input type="text" name="pro_keyword2" id="pro_keyword2"value="${detail.pro_keyword2}"
+											data-parsley-length="[0, 5]">&nbsp;
+										#<input type="text" name="pro_keyword3" id="pro_keyword3"value="${detail.pro_keyword3}"
+											data-parsley-length="[0, 5]">></td>
 								</tr>
 								<tr>
 									<td>목표금액</td>
@@ -160,8 +133,8 @@ p {
 									<td>목표 금액을 적어주세요.</td>
 								</tr>
 								<tr>
-									<td><input type="text" name="pro_price" id="pro_price"
-										value="${detail.pro_price}"></td>
+									<td><input type="text" name="pro_price" id="pro_price" value="${detail.pro_price}"
+									data-parsley-type="digits" data-parsley-trigger="change"></td>
 								</tr>
 								<tr>
 									<td>프로젝트 진행기간</td>
@@ -171,9 +144,9 @@ p {
 								</tr>
 								<tr>
 									<td><input type="text" name="pro_start" id="pro_start"
-										class="datepicker" value="${detail.pro_start}"> ~ <input
-										type="text" name="pro_end" id="pro_end" class="datepicker"
-										value="${detail.pro_end}"></td>
+								class="datepicker" value="${detail.pro_start}"> ~ <input
+								type="text" name="pro_end" id="pro_end" class="datepicker"
+								value="${detail.pro_end}"></td>
 								</tr>
 								<tr>
 									<td>프로젝트 대표 이미지</td>
@@ -182,42 +155,47 @@ p {
 									<td>프로젝트를 한 눈에 나타낼 수 있는 이미지를 등록해주세요.</td>
 								</tr>
 								<tr>
-									<td>현재 파일 : ${detail.pro_imageURL}&nbsp;<input type="file"
-										name="file1" id="file1" size="50"></td>
+									<td>현재 파일 : ${detail.pro_imageURL}&nbsp;
+									<img src="${path}/resources/images/${detail.pro_imageURL}" width="100" height="100"><br>
+									<input type="file"name="file1" id="file1" size="50"
+									data-parsley-max-file-size="3072"></td>
 								</tr>
 								<tr>
 									<td><input type="hidden" name="pro_id"
-										value="${detail.pro_id}"></td>
+								value="${detail.pro_id}"></td>
 								</tr>
 								<tr>
 									<td><input type="button" value="저장하기" id='save1'></td>
 								</tr>
 							</table>
-						</form>
-						</p>
-					</div>
-					<div class="tab-pane fade" id="reward">
-						<p>리워드</p>
-					</div>
-					<div class="tab-pane fade" id="story">
-						<p>
-						<form id="story_form" name="story_form" method="post" action="${path}/project/save3">
+						</form></p>
+			</div>
+			<div id="view2">
+				<p>리워드</p>
+			</div>
+			<div id="view3">
+				<p><form id="story_form" name="story_form" method="post"
+					action="${path}/project/save3" data-parsley-validate>
 							소개 영상<br>
 							유튜브 동영상 주소를 적어주세요<br>
 							동영상을 등록하지 않으면 메인사진이 올라갑니다<br>
 							<input type="text" name="pro_video" value="${detail.pro_video}" size="50"><br>
 							<br>스토리<br>
-							<textarea rows="10" cols="30" id="ir1" name="pro_content" style="width:766px; height:412px; ">${detail.pro_content}</textarea><br>
+							<textarea rows="10" cols="30" id="summernote" name="pro_content" style="width:766px; height:500px;">
+							${detail.pro_content}</textarea>
+							<br>
 							간단설명<br>
-							프로젝트에 대한 간단한 설명을 해주세요<br>
-							<textarea id="pro_summary" name="pro_summary">${detail.pro_summary}</textarea>
+							프로젝트에 대한 간단한 설명을 해주세요.(최소 20글자, 최대 100글자)<br>
+							<textarea id="pro_summary" name="pro_summary" style="width:735px; height:200px;"
+							data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100"
+							>${detail.pro_summary}</textarea>
 							<input type="hidden" name="pro_id" value="${detail.pro_id}">
 							<input type="button" value="저장하기" id='save3'>
 						</form>
-						</p>
-					</div>
-					<div class="tab-pane fade" id="maker">
-						<form id="maker_form" action="${path}/maker/save4"
+				</p>
+			</div>
+			<div id="view4">
+				<p><form id="maker_form" action="${path}/maker/save4"
 							method="post" enctype="multipart/form-data" >
 
 							<table class="table_view">
@@ -251,23 +229,22 @@ p {
 									<th colspan="2"><button id="save4">저장하기</button></th>
 								</tr>
 							</table>
-						</form>
-					</div>
-				</div>
+						</form></P>
 			</div>
 		</div>
 	</div>
-	<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-
 </body>
-
 <script type="text/javascript">
 	pk('.datepicker').pickadate({
 		format : 'yyyy-mm-dd',
 		formatSubmit : 'yyyy-mm-dd'
-	})
+	});
+	
+	$(document).ready(function() {
+		$('#summernote').summernote({
+			height: 400
+		});
+	});
 </script>
 <script>
 	$(document).ready(function() {
@@ -281,10 +258,10 @@ p {
 			alert("저장되었습니다");
 		});
 		
-		$("#save3").click(function() 
-			{ oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
-			$("#story_form").submit();
-		})
+		$("#save3").click(function() {
+			document.story_form.submit();
+			alert("저장되었습니다");
+		});
 		
 		$('#save4').click(function() {
 			document.maker_form.submit();
@@ -298,26 +275,19 @@ p {
 	});
 </script>
 <script type="text/javascript">
-	var oEditors = [];
-	ed(function() {
-		nhn.husky.EZCreator.createInIFrame({
-			oAppRef : oEditors,
-			elPlaceHolder : "ir1",
-			//SmartEditor2Skin.html 파일이 존재하는 경로
-			sSkinURI : "${path}/resources/editor/SmartEditor2Skin.html",
-			htParams : {
-				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
-				bUseToolbar : true,
-				// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
-				bUseVerticalResizer : true,
-				// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
-				bUseModeChanger : true,
-				fOnBeforeUnload : function() {
-
-				}
-			},
-			fCreator : "createSEditor2"
-		});
+	window.Parsley.addValidator('maxFileSize', {
+		  validateString: function(_value, maxSize, parsleyInstance) {
+		    if (!window.FormData) {
+		      alert('You are making all developpers in the world cringe. Upgrade your browser!');
+		      return true;
+		    }
+		    var files = parsleyInstance.$element[0].files;
+		    return files.length != 1  || files[0].size <= maxSize * 1024;
+		  },
+		  requirementType: 'integer',
+		  messages: {
+		    ko: '%s kb(3Mb) 이하 파일만 입력가능합니다'
+		  }
 	});
 </script>
 </html>

@@ -70,10 +70,11 @@
 	
 	<!-- 파일 업로드 -->
 	<beans:bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
-		<!-- max upload size in bytes -->
-		<beans:property value="20971520" name="maxUploadSize"/>
-        <!-- max size of file in memory (in bytes) -->
-		<beans:property value="1048576" name="maxInMemorySize"/>
+		<beans:property value="10485760" name="maxUploadSize"/>
+	</beans:bean>
+	<beans:bean class="java.lang.String" id="uploadPath">
+		<beans:constructor-arg value="D:\\JavaBigData2th\\mywork_spring\\.metadata\\.plugins\\
+		org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Funding\\resources\\images\\"/>	<!-- value값에 파일업로드시 저장할 폴더 경로 지정 -->
 	</beans:bean>
 
 	<!-- oauth2 login -->

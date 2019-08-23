@@ -144,7 +144,8 @@ public class ProjectController {
 		mav.addObject("detail", projectService.pro_detail(pro_id));
 		return mav;
 	}
-
+	
+	// 프로젝트 수정하기
 	@RequestMapping("update/{pro_id}")
 	public ModelAndView updatepage(@PathVariable("pro_id") int pro_id, ModelAndView mav, Model model) throws Exception {
 		mav.setViewName("project/input");
@@ -153,6 +154,7 @@ public class ProjectController {
 		return mav;
 	}
 
+	// 프로젝트 상세보기
 	@RequestMapping("detail/{pro_id}")
 	public ModelAndView detail(@PathVariable("pro_id") int pro_id, ModelAndView mav, Model model) throws Exception {
 		mav.setViewName("project/pro_detail");
@@ -178,102 +180,13 @@ public class ProjectController {
 		makerService.delete(dto.getMaker_idx());
 		return "redirect:/project/my_pro";
 	}
-
+	// 프로젝트 승인요청버튼
 	@RequestMapping("project/request")
 	public String request(Model model, int pro_id) throws Exception {
 		projectService.request(pro_id);
 		model.addAttribute("detail", projectService.pro_detail(pro_id));
 		model.addAttribute("maker_detail", makerService.makerinfo(pro_id));
 		return "project/input";
-	}
-
-	// 스마트에디터 싱글파일 업로드
-	@RequestMapping("file_uploader")
-	public String file_uploader(HttpServletRequest request, HttpServletResponse response, ProjectDTO dto) {
-		String return1 = request.getParameter("callback");
-		String return2 = "?callback_func=" + request.getParameter("callback_func");
-		String return3 = "";
-		String name = "";
-		try {
-			if (dto.getFile2() != null && dto.getFile2().getOriginalFilename() != null
-					&& !dto.getFile2().getOriginalFilename().equals("")) {
-				// 기존 상단 코드를 막고 하단코드를 이용
-				name = dto.getFile2().getOriginalFilename()
-						.substring(dto.getFile2().getOriginalFilename().lastIndexOf(File.separator) + 1);
-				String filename_ext = name.substring(name.lastIndexOf(".") + 1);
-				filename_ext = filename_ext.toLowerCase();
-				String[] allow_file = { "jpg", "png", "bmp", "gif" };
-				int cnt = 0;
-				for (int i = 0; i < allow_file.length; i++) {
-					if (filename_ext.equals(allow_file[i])) {
-						cnt++;
-					}
-				}
-				if (cnt == 0) {
-					return3 = "&errstr=" + name;
-				} else {
-					// 파일 기본경로
-					String dftFilePath = request.getSession().getServletContext().getRealPath("/");
-					// 파일 기본경로 _ 상세경로
-					String filePath = dftFilePath + "resources" + File.separator + "editor" + File.separator + "upload"
-							+ File.separator;
-					File file = new File(filePath);
-					if (!file.exists()) {
-						file.mkdirs();
-					}
-					String realFileNm = "";
-					SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-					String today = formatter.format(new java.util.Date());
-					realFileNm = today + UUID.randomUUID().toString() + name.substring(name.lastIndexOf("."));
-					String rlFileNm = filePath + realFileNm;
-					///////////////// 서버에 파일쓰기 /////////////////
-					dto.getFile2().transferTo(new File(rlFileNm));
-					///////////////// 서버에 파일쓰기 /////////////////
-					return3 += "&bNewLine=true";
-					return3 += "&sFileName=" + name;
-					return3 += "&sFileURL=/resources/editor/upload/" + realFileNm;
-				}
-			} else {
-				return3 += "&errstr=error";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "redirect:" + return1 + return2 + return3;
-	}
-
-	// 스마트에디터 다중파일업로드
-	@RequestMapping(value = "file_uploader_html5", method = RequestMethod.POST)
-	@ResponseBody
-	public String multiplePhotoUpload(HttpServletRequest request) {
-		// 파일정보
-		StringBuffer sb = new StringBuffer();
-		try {
-			// 파일명을 받는다 - 일반 원본파일명
-			String oldName = request.getHeader("file-name");
-			// 파일 기본경로 _ 상세경로
-			String filePath = "D:\\JavaBigData2th\\mywork_spring\\.metadata\\.plugins\\"
-					+ "org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Funding\\resources\\photoUpload";
-			String saveName = sb.append(new SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis()))
-					.append(UUID.randomUUID().toString()).append(oldName.substring(oldName.lastIndexOf(".")))
-					.toString();
-			InputStream is = request.getInputStream();
-			OutputStream os = new FileOutputStream(filePath + saveName);
-			int numRead;
-			byte b[] = new byte[Integer.parseInt(request.getHeader("file-size"))];
-			while ((numRead = is.read(b, 0, b.length)) != -1) {
-				os.write(b, 0, numRead);
-			}
-			os.flush();
-			os.close();
-			// 정보 출력
-			sb = new StringBuffer();
-			sb.append("&bNewLine=true").append("&sFileName=").append(oldName).append("&sFileURL=")
-					.append("http://localhost:8888/Funding/resources/photoUpload/").append(saveName);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return sb.toString();
 	}
 
 }
