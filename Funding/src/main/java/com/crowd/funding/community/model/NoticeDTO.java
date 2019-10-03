@@ -10,9 +10,10 @@ public class NoticeDTO {
 	private int mem_idx;
 	private String mem_email;
 	private String mem_name;
-	private int cnt;	// ´ñ±Û °¹¼ö
-	private String show;	// È­¸é Ç¥½Ã ¿©ºÎ
-	private String[] files;	// Ã·ºÎÆÄÀÏ ¹è¿­
+	private String writer;		// ì‘ì„±ì ì•„ì´ë””
+	private int cnt;	// ëŒ“ê¸€ ê°¯ìˆ˜
+	private String show;	// í™”ë©´ í‘œì‹œ ì—¬ë¶€
+	private String[] files;	// ì²¨ë¶€íŒŒì¼ ì´ë¦„ ë°°ì—´
 	
 	public String getMem_name() {
 		return mem_name;
@@ -73,6 +74,12 @@ public class NoticeDTO {
 	}
 	public void setFiles(String[] files) {
 		this.files = files;
+	}
+	public String getWriter() {
+		return writer;
+	}
+	public void setWriter(String writer) {
+		this.writer = writer;
 	}
 	
 }

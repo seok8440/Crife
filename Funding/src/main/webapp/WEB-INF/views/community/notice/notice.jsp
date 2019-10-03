@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>공지사항</title>
 <!-- bootstrap 적용 -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -36,8 +36,10 @@ $(function () {
 </head>
 <body>
 	<%@ include file="../../include/navbar.jsp"%>
-<h2>공지사항</h2>회원 권한 : ${type}
+<h2>공지사항</h2>
 <hr>
+<div class="row justify-content-md-center">
+<div class="col-md-10">
 <table class="table table-hover">
 	<thead>
 		<tr>
@@ -59,8 +61,8 @@ $(function () {
 			</tr>
 		</c:forEach>
 	</tbody>
-	<c:if test="${type==2}">
-	<tfoot>
+<c:if test="${login.mem_type==2}"> 
+	<tfoot align="right">
 		<tr>
 			<td colspan="4"></td>
 			<td>
@@ -68,8 +70,10 @@ $(function () {
 			</td>
 		</tr>
 	</tfoot>
-	</c:if>
+</c:if>
 </table>
 <%@ include file="../../include/page.jsp"%>
+</div>
+</div>
 </body>
 </html>

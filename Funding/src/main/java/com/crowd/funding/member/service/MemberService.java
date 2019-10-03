@@ -2,6 +2,8 @@ package com.crowd.funding.member.service;
 
 import java.util.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.crowd.funding.member.model.EmailDTO;
 import com.crowd.funding.member.model.LoginDTO;
 import com.crowd.funding.member.model.MemberDTO;
@@ -10,9 +12,9 @@ public interface MemberService {
 	
 	//sns
 		MemberDTO snsLogin(MemberDTO mem) throws Exception;
-		void snsjoinPOST(MemberDTO memDTO) throws Exception;
+		void snsjoinPOST(MemberDTO memDTO, Date registertime) throws Exception;
 
-	void joinPOST(MemberDTO memDTO) throws Exception;
+	void joinPOST(MemberDTO memDTO, Date registertime) throws Exception;
 
 	MemberDTO loginPOST(LoginDTO logDTO) throws Exception;
 	
@@ -35,8 +37,10 @@ public interface MemberService {
 	// 내정보 - 수정
 	void myinfoUP(MemberDTO memDTO) throws Exception;
 
+
 	// 내정보 - 삭제(탈퇴요청)
 	void myinfoDEL(int mem_idx) throws Exception;
+	int statusPro(int mem_idx);
 	
 	// 아이디 찾기
 	int userfindID(String find) throws Exception;
@@ -44,5 +48,9 @@ public interface MemberService {
 	void userfindPW(String find) throws Exception;
 	// 비밀번호 재설정
 	void resetPW(String mem_password, String mem_email, String email_key) throws Exception;
+	
+	
+	MemberDTO memchk_lastlogin(MemberDTO mem) throws Exception;
+	
 
 }

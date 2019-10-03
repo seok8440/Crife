@@ -1,11 +1,17 @@
 package com.crowd.funding.member.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.crowd.funding.member.MailHandler;
 import com.crowd.funding.member.TempKey;
@@ -28,15 +34,15 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void snsjoinPOST(MemberDTO memDTO) throws Exception {
+	public void snsjoinPOST(MemberDTO memDTO, Date registertime) throws Exception {
 		System.out.println("##### memberService : joinPOST #####");
-		memDAO.snsjoinPOST(memDTO);
+		memDAO.snsjoinPOST(memDTO, registertime);
 	}
 
 	@Override
-	public void joinPOST(MemberDTO memDTO) throws Exception {
+	public void joinPOST(MemberDTO memDTO, Date registertime) throws Exception {
 		System.out.println("##### memberService : joinPOST #####");
-		memDAO.joinPOST(memDTO);
+		memDAO.joinPOST(memDTO, registertime);
 
 		// 인증키 생성
 		String email_key = new TempKey().getKey(50, false);
@@ -46,9 +52,10 @@ public class MemberServiceImpl implements MemberService {
 		MailHandler sendMail = new MailHandler(mailSender);
 		sendMail.setSubject("[이메일 인증]");
 		sendMail.setText(new StringBuffer().append("<h1>메일인증</h1>")
-				.append("<a href='http://localhost:8888/funding/user/emailConfirm?mem_email=" + memDTO.getMem_email())
+				.append("<a href='http://localhost:8080/funding/user/emailConfirm?mem_email=" + memDTO.getMem_email())
 				.append("&email_key=" + email_key + "' target='_blank'>이메일 인증</a>").toString());
-		sendMail.setFrom("seok8440@gmail.com", "jin");
+														//_blank : 새 윈도우 창을 열어서, 웹페이지를 엽니다. 
+		sendMail.setFrom("lulumos1993@gmail.com", "페퍼민트");
 		sendMail.setTo(memDTO.getMem_email());
 		sendMail.send();
 
@@ -112,6 +119,12 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public int statusPro(int mem_idx) {
+		
+		return memDAO.statusPro(mem_idx);
+	}
+
+	@Override
 	public int userfindID(String find) throws Exception {
 		System.out.println("##### memberService : userfindID #####");
 		return memDAO.userfindID(find);
@@ -129,11 +142,11 @@ public class MemberServiceImpl implements MemberService {
 		StringBuffer r = new StringBuffer();
 		sendMail.setSubject("[비밀번호 재설정 안내]");
 		sendMail.setText(r.append("<h1>비밀번호 변경</h1>")
-				.append("<a href='http://localhost:8888/funding/user/resetpw?mem_email=" + find)
+				.append("<a href='http://localhost:8080/funding/user/resetpw?mem_email=" + find)
 				.append("&email_key=" + email_key + "' target='_blank'>비밀번호 변경</a>").append(" 어디로 붙을까?").append("\n") // 안됨
 				.append("a").append(System.getProperty("line.separator")) // 안됨
 				.append("b").toString());
-		sendMail.setFrom("seok8440@gmail.com", "jin");
+		sendMail.setFrom("lulumos1993@gmail.com", "페퍼민트");
 		sendMail.setTo(find);
 		sendMail.send();
 
@@ -145,5 +158,20 @@ public class MemberServiceImpl implements MemberService {
 	public void resetPW(String mem_password, String mem_email, String email_key) throws Exception {
 		memDAO.resetPW(mem_password, mem_email, email_key);
 	}
+
+	@Override
+	public MemberDTO memchk_lastlogin(MemberDTO mem) throws Exception {
+		
+						
+		return memDAO.memchk_lastlogin(mem);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

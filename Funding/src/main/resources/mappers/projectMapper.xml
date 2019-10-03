@@ -5,7 +5,6 @@
 <!-- namespace 선언 -->
 <mapper namespace= "project">
 
-	
 	<insert id="makerInsert" parameterType="com.crowd.funding.project.model.ProjectDTO" useGeneratedKeys="true"
 		keyProperty="maker_idx">
 		insert into maker(mem_idx)
@@ -40,6 +39,15 @@
 		select *, TIMESTAMPDIFF(DAY, CURDATE(), `pro_end`) day from project where pro_id = #{pro_id}
 	</select>
 	
+	<select id ="pro_news" resultType="com.crowd.funding.community.model.NewsDTO">
+		select * from com_news where pro_id = #{pro_id} order by news_idx desc
+	</select>
+	
+	<insert id="insert_news">
+		INSERT INTO com_news (pro_id, maker_idx, news_title, news_content, news_date) 
+		VALUES (#{pro_id}, #{maker_idx}, #{news_title}, #{news_content}, now())
+	</insert>
+	
 	<select id ="pro_name" resultType="String">
 		select pro_name from project where pro_id = #{pro_id}
 	</select>
@@ -68,4 +76,36 @@
 		set pro_status=2
 		where pro_id=#{pro_id} limit 1
 	</update>
+	<insert id = "reward_insert" useGeneratedKeys="true" keyProperty="reward_id">
+		INSERT INTO reward_item (pro_id, mem_idx, reward_title, reward_price, reward_sell_count,
+		reward_option_detail, shipment_start, delivery_fee, reward_description, op_val) 
+		VALUES 
+		<foreach separator="," item="item" collection="list">
+           (#{item.pro_id},#{item.mem_idx},#{item.reward_title},#{item.reward_price},
+           #{item.reward_sell_count},#{item.reward_option_detail},#{item.shipment_start},
+           #{item.delivery_fee},#{item.reward_description},#{item.op_val})
+        </foreach>
+	</insert>
+	<insert id = "option_insert">
+		INSERT INTO option_item (reward_id, op_name, op_limit_qty)
+		VALUES
+		<foreach separator="," item="item" collection="list">
+		(#{item.reward_id}, #{item.op_name}, #{item.op_limit_qty})
+		</foreach>
+	</insert>
+	<delete id = "reward_del">
+		DELETE FROM reward_item WHERE pro_id = #{pro_id}
+	</delete>
+	<select id = "option_sel" resultType="com.crowd.funding.reward.domain.OptionDTO">
+		SELECT t1.op_id, t1.reward_id, t1.op_name, t1.op_limit_qty ,t1.op_count
+		FROM 
+		(SELECT t3.op_id, t3.op_name, t3.op_limit_qty, t3.reward_id, t4.op_count 
+		FROM option_item AS t3 LEFT JOIN 
+		(SELECT sum(op_count) as op_count, op_id FROM option_order group by op_id) AS t4
+		ON t3.op_id = t4.op_id) AS t1 LEFT JOIN
+		(SELECT reward_id, pro_id FROM REWARD_ITEM) AS t2 
+		ON t1.reward_id = t2.reward_id 
+		WHERE t2.pro_id = #{pro_id}; 
+	</select>
+	
 </mapper>

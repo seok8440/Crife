@@ -17,7 +17,6 @@ public class MyorderDTO {
      String order_date; // 주문한 날짜
 	 private ArrayList<MyorderDTO> orderList;
 
-	 
 	public String getOrder_date() {
 		return order_date;
 	}

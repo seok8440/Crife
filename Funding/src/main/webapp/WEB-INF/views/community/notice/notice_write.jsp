@@ -39,6 +39,11 @@
 		});
 		$(function () {
 			$("#btn_ok").click(function() {
+				if(document.write_form.notice_title.value == ""){
+					alert("제목을 입력하세요.");
+					document.write_form.notice_title.focus();
+					return;
+				}
 				document.write_form.submit();
 			});
 		});
@@ -46,29 +51,34 @@
 </head>
 <body>
 	<%@ include file="../../include/navbar.jsp"%>
-<h2>글쓰기</h2>회원 번호 : ${idx}
+<h2>글쓰기</h2>회원 번호 : ${login.mem_idx}
 <hr>
-<form name="write_form" method="post" action="${path}/community/notice/insert.do">
+<div class="row justify-content-md-center">
+<div class="col-md-8">
+<form name="write_form" method="post" action="${path}/community/notice/insert/${login.mem_idx}">
   <div class="form-group">
     <label for="exampleFormControlInput1">제목</label>
     <input type="text" class="form-control" name="notice_title" placeholder="제목을 입력하세요.">
   </div>
   <div class="form-group">
     <label for="exampleFormControlInput1">작성자</label>
-    <input type="text" class="form-control" name="mem_name" placeholder="이름을 입력하세요.">
+    <input type="text" class="form-control" name="mem_name" value="${login.mem_name}">
   </div>
   <div class="form-group">
     <label for="exampleFormControlTextarea1">내용</label>
     <textarea class="form-control" name="notice_content" rows="10" placeholder="내용을 입력하세요."></textarea>
-<!--   <script>
+  <script>
   // 스마트 에디터 적용
   // id가 description인 태그에 ckditor 적용.
-  CKEDITOR.replace("content");
-  </script> -->
-  <input type="hidden" value="${idx}">
+  CKEDITOR.replace("notice_content");
+  </script>
+  <input type="hidden" value="${login.mem_idx}">
   </div>
 </form>
+<div align="right">
 <button type="button" class="btn btn-info" id="btn_ok">완료</button>
 <button type="button" class="btn btn-info" id="btn_cancel">취소</button>
+</div>
+</div>
 </body>
 </html>

@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import com.crowd.funding.myorder.domain.MyoptionDTO;
 import com.crowd.funding.myorder.domain.MyorderDTO;
 
 @Repository
@@ -37,5 +38,10 @@ public class OrderDAOImpl implements OrderDAO {
 	public OrderDTO orderInfo(int mem_idx) throws Exception {
 		return sqlSession.selectOne(NAMESPACE + ".order_info", mem_idx);
 	}
-	
+
+	@Override
+	public void myOptionInsert(List<MyoptionDTO> oplist) throws Exception {
+		sqlSession.insert(NAMESPACE +".my_option_insert",oplist);
+		
+	}
 }

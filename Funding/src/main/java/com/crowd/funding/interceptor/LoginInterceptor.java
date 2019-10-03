@@ -1,17 +1,23 @@
 package com.crowd.funding.interceptor;
 
+import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.crowd.funding.maker.service.MakerService;
 import com.crowd.funding.member.model.MemberDTO;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter {
+
+	@Inject
+	MakerService maService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -43,11 +49,12 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		ModelMap modelMap = modelAndView.getModelMap();
 		MemberDTO memDTO = (MemberDTO) modelMap.get("mem");
 
-		// 0 : sns가입안된 계정, 1:sns로그인 성공, id : id가 없다, pw : 비밀번호 불일치, 3 : 휴면계정
-		Object msg = modelMap.get("msg");
+		// navercallback & loginPOST )) nosnsid: 가입안된 sns계정, noid : 가입안된 계정, memtype_3 : 휴면계정,
+		// mispw : 비밀번호 불일치, noemailauth : 이메일 불일치
+		Object loginmsg = modelMap.get("loginmsg");
 		MemberDTO snsUser = (MemberDTO) modelMap.get("snsUser");
 
-		http.setAttribute("msg", msg);
+		http.setAttribute("loginmsg", loginmsg);
 
 		// httpSession에 컨트롤러에서 저장한 login을 저장
 		if (memDTO != null) {
@@ -59,6 +66,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 				System.out.println("#####로그인성공");
 				http.setAttribute("login", memDTO);
+
 
 				if (request.getParameter("useCookie") != null) {
 					System.out.println("쿠키있음");
@@ -74,13 +82,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		} else if (memDTO == null) {
 			System.out.println("#####로그인 실패 ");
 		}
-
-		System.out.println("ㄱㄱㄱㄱ msg : " + msg);
-
+		
 		// 이전에 하던 페이지로 이동, or home으로 이동
 		Object destination = http.getAttribute("destination");
 		System.out.println("이동할 경로 : " + destination);
-		if (msg == "0") {
+		if (loginmsg == "nosnsid") {
 			http.setAttribute("snsUser", snsUser);
 			response.sendRedirect("/funding/user/snsjoin");
 		} else {

@@ -23,25 +23,33 @@
 	<!-- 주문 창에서 입력한 내용 저장  -->
 	<insert id = "order_insert" useGeneratedKeys="true" keyProperty="order_id">
 		INSERT INTO  
-		REWARD_ORDER (mem_idx, order_email, order_name, order_phone, order_address1,order_address2,order_address3,order_address4)
-		VALUES (2,#{order_email},#{order_name},#{order_phone},#{order_address1},#{order_address2},#{order_address3},#{order_address4});
+		REWARD_ORDER (mem_idx, order_name, order_phone, order_address1,order_address2,order_address3,order_address4)
+		VALUES (#{mem_idx},#{order_name},#{order_phone},#{order_address1},#{order_address2},#{order_address3},#{order_address4});
 	</insert>
 	
 	<!--order에 저장한 후 myorder에도 저장하는데 다수 DTO 저장  -->
-	<insert id ="my_order_insert">
+	<insert id ="my_order_insert" useGeneratedKeys="true" keyProperty="myinfo">
 		INSERT INTO myorder (mem_idx, pro_id, reward_id, order_count, order_id, order_date) 
 		VALUES 
 		<foreach separator="," item="item" collection="list">
-           (2,2,#{item.reward_id},#{item.order_count},#{item.order_id},now())
+           (#{item.mem_idx},#{item.pro_id},#{item.reward_id},#{item.order_count},#{item.order_id},now())
         </foreach>
 	</insert>
 	
 	<select id="order_info" resultType="com.crowd.funding.order.domain.OrderDTO">
-		select order_name, order_phone, CONCAT_WS(' ',order_address1, order_address3, order_address4) AS order_address_all
+		select order_name, order_phone, order_address1, order_address3, order_address4
 		from reward_order
 		where mem_idx = #{mem_idx}
 		order by order_id desc
 		limit 1;
 	</select>
+	
+	<insert id ="my_option_insert">
+		INSERT INTO option_order (myinfo, op_id, op_count) 
+		VALUES 
+		<foreach separator="," item="item" collection="list">
+           (#{item.myinfo},#{item.op_id},#{item.op_count})
+        </foreach>
+	</insert>
 	
 </mapper>

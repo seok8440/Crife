@@ -2,51 +2,89 @@ package com.crowd.funding.community.controller;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.crowd.funding.community.model.NoticeDAO;
 import com.crowd.funding.community.model.NoticeDTO;
+import com.crowd.funding.community.service.NoticeService;
+import com.crowd.funding.community.service.Pager;
 
 @Controller
 @RequestMapping("/community/*")
 public class NoticeController {
 
 	@Inject
-	NoticeDAO noticeDao;
+	NoticeService noticeService;
 
 	@RequestMapping("/notice/notice.do")
-	public ModelAndView list() throws Exception {
-		List<NoticeDTO> list = noticeDao.listAll(0, 0, "", "");	// ¸ñ·Ï
+	public ModelAndView list(@RequestParam(defaultValue = "name") String search_option,
+			@RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "1") int curPage)
+			throws Exception {
+		// ë ˆì½”ë“œ ê°¯ìˆ˜ ê³„ì‚°
+		int count = 100;
+		// í˜ì´ì§€ ê´€ë ¨ ì„¤ì •
+		Pager pager = new Pager(count, curPage);
+		int start = pager.getPageBegin();
+		int end = pager.getPageEnd();
+		
+		List<NoticeDTO> list = noticeService.listAll(start,end,search_option,keyword); // ëª©ë¡
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("community/notice/notice");	// ÀÌµ¿ÇÒ ÆäÀÌÁö
-		Map<String, Object> map = new HashMap<>();
-		map.put("list", list);	// ¸Ê¿¡ ÀÚ·á ÀúÀå
-		mav.addObject("map", map);	// µ¥ÀÌÅÍ ÀúÀå
-		return mav;	
+		HashMap<String,Object> map=new HashMap<>();
+		map.put("list", list); // ë§µì— ìë£Œ ì €ì¥
+		map.put("count", count); 
+		map.put("pager", pager); // í˜ì´ì§€ ë„¤ë¹„ê²Œì´ì…˜ì„ ìœ„í•œ ë³€ìˆ˜
+		map.put("search_option", search_option);
+		map.put("keyword", keyword);
+		mav.setViewName("community/notice/notice"); // ì´ë™í•  í˜ì´ì§€
+		mav.addObject("map", map); // ë°ì´í„° ì €ì¥
+		return mav;
 	}
-	
+
 	@RequestMapping("/notice/write.do")
 	public String write() {
 		return "community/notice/notice_write";
 	}
-	
-	@RequestMapping("/notice/insert.do")
-	public String insert(@ModelAttribute NoticeDTO dto, HttpSession session) throws Exception {
-		// ·Î±×ÀÎÇÑ »ç¿ëÀÚÀÇ ¾ÆÀÌµğ
-		String mem_email = (String) session.getAttribute("mem_idx");
-		dto.setMem_email(mem_email);
-		System.out.println(mem_email);
-		// ·¹ÄÚµå°¡ ÀúÀåµÊ
-		noticeDao.insert(dto);
-		// ¸ñ·Ï °»½Å
-		return "redirect:/community/notice/notice.do";
+
+	@RequestMapping("/notice/detail.do")
+	public ModelAndView view(@RequestParam int notice_idx, HttpSession session) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("community/notice/notice_detail");
+		mav.addObject("dto", noticeService.read(notice_idx));
+		return mav;
 	}
+
+	@RequestMapping("/notice/insert/{mem_idx}")
+	public ModelAndView insert(@PathVariable int mem_idx, @ModelAttribute NoticeDTO dto, ModelAndView mav) throws Exception {
+		// ë¡œê·¸ì¸í•œ ì‚¬ìš©ìì˜ ì•„ì´ë””
+		/*
+		 * String writer = (String) session.getAttribute("mem_email");
+		 * dto.setWriter(writer);
+		 */
+		mav.setViewName("redirect:/community/notice/notice.do");
+		mav.addObject("mem_idx", mem_idx);
+		System.out.println("####################"+mem_idx);
+		// ë ˆì½”ë“œê°€ ì €ì¥ë¨
+		noticeService.create(dto);
+		return mav; // ëª©ë¡ ê°±ì‹ 
+	}
+	
+	@RequestMapping("/notice/update.do")
+	public String update() {
+		return "community/notice/notice_update";
+	}
+
+	@RequestMapping("/notice/delete/{notice_idx}")
+	public String delete(@PathVariable int notice_idx, HttpSession session) throws Exception {
+		noticeService.delete(notice_idx);
+		return "redirect:/community/notice/notice.do"; // ëª©ë¡ ê°±ì‹ 
+	}
+		
 }

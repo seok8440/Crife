@@ -13,14 +13,7 @@ public class OrderDTO {
 	String order_address2;
 	String order_address3;
 	String order_address4;
-	String order_address_all;
-	
-	public String getOrder_address_all() {
-		return order_address_all;
-	}
-	public void setOrder_address_all(String order_address_all) {
-		this.order_address_all = order_address_all;
-	}
+
 	public int getOrder_id() {
 		return order_id;
 	}

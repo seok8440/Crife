@@ -4,9 +4,15 @@ import java.util.List;
 
 public interface ManagerDAO {
 
-		public List<ManagerDTO> listManager();
-		public void insertManager(ManagerDTO dto);
-		public void updateManager(ManagerDTO dto);
-		public void deleteManager(String admin_id);
-		public ManagerDTO viewManager(String admin_id);
+	public List<ManagerDTO> listManager() throws Exception;
+
+	public void insertManager(ManagerDTO dto) throws Exception;
+
+	public void updateManager(ManagerDTO dto) throws Exception;
+
+	public void deleteManager(String admin_id) throws Exception;
+
+	public ManagerDTO viewManager(String admin_id) throws Exception;
+
+	public String loginCheck(ManagerDTO dto) throws Exception;
 }

@@ -23,11 +23,6 @@ public class RewardDAOImpl implements RewardDAO {
 	}
 	
 	@Override
-	public List<RewardDTO> rewardAll(int pro_id) throws Exception {
-		return sqlSession.selectList(NAMESPACE+".reward_all",pro_id);
-	}
-	
-	@Override
 	public List<RewardDTO> rewardSel(int reward_id[]) throws Exception {
 		return sqlSession.selectList(NAMESPACE+".reward_select", reward_id);
 	}
@@ -37,5 +32,9 @@ public class RewardDAOImpl implements RewardDAO {
 		return sqlSession.selectOne(NAMESPACE+".personinfo", mem_idx);
 	}
 
-	
+	@Override
+	public List<RewardDTO> rewardShow(int pro_id) throws Exception {
+		return sqlSession.selectList(NAMESPACE+".reward_show",pro_id);
+	}
+
 }

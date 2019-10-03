@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import com.crowd.funding.myorder.domain.MyoptionDTO;
 import com.crowd.funding.myorder.domain.MyorderDTO;
 import com.crowd.funding.order.domain.OrderDAO;
 import com.crowd.funding.order.domain.OrderDTO;
@@ -32,6 +33,9 @@ public class OrderServiceImpl implements OrderService {
 	public OrderDTO orderInfo(int mem_idx) throws Exception {
 		return orderDAO.orderInfo(mem_idx);
 	}
-	
-	
+
+	@Override
+	public void myOptionInsert(List<MyoptionDTO> oplist) throws Exception {
+		orderDAO.myOptionInsert(oplist);
+	}
 }

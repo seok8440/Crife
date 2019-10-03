@@ -1,5 +1,7 @@
 package com.crowd.funding.reward.domain;
 
+import java.util.List;
+
 import com.crowd.funding.myorder.domain.MyorderDTO;
 
 public class RewardDTO {
@@ -11,12 +13,57 @@ public class RewardDTO {
 	int reward_sell_count; // 리워드 판매가능한 갯수 
 	int sumAmount; // 각 리워드별 합산 
 	MyorderDTO myorderDTO;
-	int remain_count; // 각 리워드 별 남은 수량
+	int order_qty; // 사용자가 주문한 수량
 	int qty; // 사용자가 선택한 리워드별 수량
 	String reward_description; // 리워드 상세설명
 	String reward_option_detail; // 리워드 옵션
+	String shipment_start;
+	int delivery_fee;
+	int op_val;
+	List<RewardDTO> list;
+	List<OptionDTO> optionlist;
+
 	
-	
+	public int getOp_val() {
+		return op_val;
+	}
+
+	public void setOp_val(int op_val) {
+		this.op_val = op_val;
+	}
+
+	public List<OptionDTO> getOptionlist() {
+		return optionlist;
+	}
+
+	public void setOptionlist(List<OptionDTO> optionlist) {
+		this.optionlist = optionlist;
+	}
+
+	public int getDelivery_fee() {
+		return delivery_fee;
+	}
+
+	public void setDelivery_fee(int delivery_fee) {
+		this.delivery_fee = delivery_fee;
+	}
+
+	public String getShipment_start() {
+		return shipment_start;
+	}
+
+	public void setShipment_start(String shipment_start) {
+		this.shipment_start = shipment_start;
+	}
+
+	public List<RewardDTO> getList() {
+		return list;
+	}
+
+	public void setList(List<RewardDTO> list) {
+		this.list = list;
+	}
+
 	public String getReward_description() {
 		return reward_description;
 	}
@@ -33,12 +80,12 @@ public class RewardDTO {
 		this.reward_option_detail = reward_option_detail;
 	}
 
-	public int getRemain_count() {
-		return remain_count;
+	public int getOrder_qty() {
+		return order_qty;
 	}
 
-	public void setRemain_count(int remain_count) {
-		this.remain_count = remain_count;
+	public void setOrder_qty(int order_qty) {
+		this.order_qty = order_qty;
 	}
 
 	public MyorderDTO getMyorderDTO() {
@@ -112,6 +159,15 @@ public class RewardDTO {
 	public void setQty(int qty) {
 		this.qty = qty;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "RewardDTO [reward_id=" + reward_id + ", pro_id=" + pro_id + ", mem_idx=" + mem_idx + ", reward_title="
+				+ reward_title + ", reward_price=" + reward_price + ", reward_sell_count=" + reward_sell_count
+				+ ", sumAmount=" + sumAmount + ", myorderDTO=" + myorderDTO + ", order_qty=" + order_qty + ", qty="
+				+ qty + ", reward_description=" + reward_description + ", reward_option_detail=" + reward_option_detail
+				+ ", shipment_start=" + shipment_start + ", delivery_fee=" + delivery_fee + ", list=" + list
+				+ ", optionlist=" + optionlist + "]";
+	}
 
 }

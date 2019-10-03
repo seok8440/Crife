@@ -5,18 +5,11 @@ import java.util.List;
 import com.crowd.funding.community.model.NoticeDTO;
 
 public interface NoticeDAO {
-	public void deleteFile(String fullName);	// Ã·ºÎÆÄÀÏ »èÁ¦
-	public List<String> getAttach(int notice_idx);	// Ã·ºÎÆÄÀÏ µî·Ï
-	public void addAttach(String fullName);	// Ã·ºÎÆÄÀÏ ÀúÀå
-	public void updateAttach(String fullName, int notice_idx);	// Ã·ºÎÆÄÀÏ ¼öÁ¤
-	public void insert(NoticeDTO dto) throws Exception;	// ±Û¾²±â
-	public NoticeDTO read(int notice_idx) throws Exception;		// ±ÛÀĞ±â
-	public void update(NoticeDTO dto) throws Exception;	// ±Û¼öÁ¤
-	public void delete(int notice_idx) throws Exception;	// ±Û»èÁ¦
-	// ¸ñ·Ï(ÆäÀÌÁö ³ª´©±â, °Ë»ö ±â´É Æ÷ÇÔ)
+	public void create(NoticeDTO dto) throws Exception; // ê¸€ì“°ê¸°
+	public void update(NoticeDTO dto) throws Exception; // ê¸€ìˆ˜ì •
+	public void delete(int notice_idx) throws Exception; // ê¸€ì‚­ì œ
+	// ëª©ë¡
 	public List<NoticeDTO> listAll(int start, int end, String search_option, String keyword) throws Exception;
-	// Á¶È¸¼ö Áõ°¡ Ã³¸®
-	public void increaseViewcnt(int notice_idx) throws Exception;
-	// ·¹ÄÚµå °¹¼ö °è»ê
-	public int countArticle(String search_option, String keyword) throws Exception;
+	public void increaseViewcnt(int notice_idx) throws Exception;// ì¡°íšŒìˆ˜ ì¦ê°€ ì²˜ë¦¬
+	public NoticeDTO read(int notice_idx) throws Exception;// ë ˆì½”ë“œ ì¡°íšŒ
 }

@@ -1,139 +1,161 @@
 package com.crowd.funding.community.service;
 
 public class Pager {
-	// ÆäÀÌÁö´ç °Ô½Ã¹° ¼ö
-	public static final int PAGE_SCALE = 5;
-	// È­¸é´ç ÆäÀÌÁö ¼ö
-	public static final int BLOCK_SCALE = 3;
-	private int curPage;	// ÇöÀç ÆäÀÌÁö
-	private int prevPage;	// ÀÌÀü ÆäÀÌÁö
-	private int nextPage;	// ´ÙÀ½ ÆäÀÌÁö
-	private int totPage;	// ÀüÃ¼ ÆäÀÌÁö °¹¼ö
-	private int totBlock;	// ÀüÃ¼ ÆäÀÌÁö ºí·Ï °¹¼ö
-	private int curBlock;	// ÇöÀç ÆäÀÌÁö ºí·Ï
-	private int prevBlock;	// ÀÌÀü ÆäÀÌÁö ºí·Ï
-	private int nextBlock;	// ´ÙÀ½ ÆäÀÌÁö ºí·Ï
-	//	where rn between #{start} and #{end}
-	private int pageBegin;		// #{start}
-	private int pageEnd;		// #{end}
-	// [ÀÌÀü] blockBegin 42 43 44 45 46 47 48 49 blockEnd [´ÙÀ½]
-	private int blockBegin;		// ÇöÀç ÆäÀÌÁö ºí·ÏÀÇ ½ÃÀÛ¹øÈ£
-	private int blockEnd;		// ÇöÀç ÆäÀÌÁö ºí·ÏÀÇ ³¡¹øÈ£
-	
-	// »ı¼ºÀÚ
-	// Page(·¹ÄÚµå °¹¼ö, ÇöÀç ÆäÀÌÁö ¹øÈ£)
+	public static final int PAGE_SCALE = 5; // í˜ì´ì§€ë‹¹ ê²Œì‹œë¬¼ìˆ˜
+	public static final int BLOCK_SCALE = 5;// í™”ë©´ë‹¹ í˜ì´ì§€ìˆ˜
+
+	private int curPage; // í˜„ì¬ í˜ì´ì§€
+	private int prevPage;// ì´ì „ í˜ì´ì§€
+	private int nextPage;// ë‹¤ìŒ í˜ì´ì§€
+	private int totPage;// ì „ì²´ í˜ì´ì§€ ê°¯ìˆ˜
+	private int totBlock; // ì „ì²´ í˜ì´ì§€ë¸”ë¡ ê°¯ìˆ˜
+	private int curBlock; // í˜„ì¬ ë¸”ë¡
+	private int prevBlock; // ì´ì „ ë¸”ë¡
+	private int nextBlock; // ë‹¤ìŒ ë¸”ë¡
+	private int pageBegin; // #{start} ë³€ìˆ˜ì— ì „ë‹¬ë  ê°’
+	private int pageEnd; // #{end} ë³€ìˆ˜ì— ì „ë‹¬ë  ê°’
+	private int blockBegin; // ë¸”ë¡ì˜ ì‹œì‘í˜ì´ì§€ ë²ˆí˜¸
+	private int blockEnd; // ë¸”ë¡ì˜ ëí˜ì´ì§€ ë²ˆí˜¸
+
+	// ìƒì„±ì
+	// Pager(ë ˆì½”ë“œê°¯ìˆ˜, ì¶œë ¥í• í˜ì´ì§€ë²ˆí˜¸)
 	public Pager(int count, int curPage) {
-		curBlock = 1;	// ÇöÀç ÆäÀÌÁö ºí·Ï ¹øÈ£
-		this.curPage = curPage;	// ÇöÀç ÆäÀÌÁö ¼³Á¤
-		setTotPage(count);	// ÀüÃ¼ ÆäÀÌÁö °¹¼ö °è»ê
-		// between #{start} and #{end}¿¡ ÀÔ·ÂµÉ °ª °è»ê
-		setPageRange();
-		setTotBlock();	// ÀüÃ¼ ÆäÀÌÁö ºí·Ï °¹¼ö °è»ê
-		// ÆäÀÌÁö ºí·ÏÀÇ ½ÃÀÛ, ³¡ ¹øÈ£ °è»ê
-		setBlockRange();
+		curBlock = 1; // í˜„ì¬ë¸”ë¡ ë²ˆí˜¸
+		this.curPage = curPage; // í˜„ì¬ í˜ì´ì§€ ë²ˆí˜¸
+		setTotPage(count); // ì „ì²´ í˜ì´ì§€ ê°¯ìˆ˜ ê³„ì‚°
+		setPageRange(); // #{start}, #{end} ê°’ ê³„ì‚°
+		setTotBlock(); // ì „ì²´ ë¸”ë¡ ê°¯ìˆ˜ ê³„ì‚°
+		setBlockRange(); // ë¸”ë¡ì˜ ì‹œì‘,ë ë²ˆí˜¸ ê³„ì‚°
 	}
+
 	public void setBlockRange() {
-		// ÇöÀç ÆäÀÌÁö°¡ ¸î¹øÂ° ÆäÀÌÁö ºí·Ï¿¡ ¼ÓÇÏ´ÂÁö °è»ê
-		curBlock = (int)Math.ceil((curPage-1)/BLOCK_SCALE)+1;
-		// ÇöÀç ÆäÀÌÁö ºí·ÏÀÇ ½ÃÀÛ, ³¡ ¹øÈ£ °è»ê
-		blockBegin = (curBlock-1)*BLOCK_SCALE+1;
-		blockEnd = blockBegin+BLOCK_SCALE-1;
-		// ¸¶Áö¸· ÆäÀÌÁö ¹øÈ£°¡ ¹üÀ§¸¦ ÃÊ°úÇÏÁö ¾Êµµ·Ï Ã³¸®
-		if(blockEnd>totPage) blockEnd = totPage;
-		// [ÀÌÀü]À» ´­·¶À» ¶§ ÀÌµ¿ÇÒ ÆäÀÌÁö ¹øÈ£
-		prevPage = (curBlock==1)?1:(curBlock-1)*BLOCK_SCALE;
-		//	[´ÙÀ½]À» ´­·¶À» ¶§ ÀÌµ¿ÇÒ ÆäÀÌÁö ¹øÈ£
-		nextPage = curBlock>totBlock?(curBlock*BLOCK_SCALE) : (curBlock*BLOCK_SCALE)+1;
-		// ¸¶Áö¸· ÆäÀÌÁö°¡ ¹üÀ§¸¦ ÃÊ°úÇÏÁö ¾Êµµ·Ï Ã³¸®
-		if(nextPage>=totPage) nextPage=totPage;
+		// ì›í•˜ëŠ” í˜ì´ì§€ê°€ ëª‡ë²ˆì§¸ ë¸”ë¡ì— ì†í•˜ëŠ”ì§€ ê³„ì‚°
+		curBlock = (curPage - 1) / BLOCK_SCALE + 1;
+		// ë¸”ë¡ì˜ ì‹œì‘í˜ì´ì§€,ëí˜ì´ì§€ ë²ˆí˜¸ ê³„ì‚°
+		blockBegin = (curBlock - 1) * BLOCK_SCALE + 1;
+		blockEnd = blockBegin + BLOCK_SCALE - 1;
+		// ë§ˆì§€ë§‰ ë¸”ë¡ ë²ˆí˜¸ê°€ ë²”ìœ„ë¥¼ ì´ˆê³¼í•˜ì§€ ì•Šë„ë¡ ì²˜ë¦¬
+		if (blockEnd > totPage) {
+			blockEnd = totPage;
+		}
+		// [ì´ì „][ë‹¤ìŒ]ì„ ëˆŒë €ì„ ë•Œ ì´ë™í•  í˜ì´ì§€ ë²ˆí˜¸
+		prevPage = (curBlock == 1) ? 1 : (curBlock - 1) * BLOCK_SCALE;
+		nextPage = curBlock > totBlock ? (curBlock * BLOCK_SCALE) : (curBlock * BLOCK_SCALE) + 1;
+		// ë§ˆì§€ë§‰ í˜ì´ì§€ê°€ ë²”ìœ„ë¥¼ ì´ˆê³¼í•˜ì§€ ì•Šë„ë¡ ì²˜ë¦¬
+		if (nextPage >= totPage) {
+			nextPage = totPage;
+		}
 	}
+
+	// ë¸”ë¡ì˜ ê°¯ìˆ˜ ê³„ì‚°
+	public void setTotBlock() {
+		totBlock = (int) Math.ceil(totPage * 1.0 / BLOCK_SCALE);
+	}
+
+// where rn between #{start} and #{end}ì— ì…ë ¥ë  ê°’		
 	public void setPageRange() {
-		// where rn between #{start} and #{end}¿¡ ÀÔ·ÂµÉ °ª
-		// ½ÃÀÛ¹øÈ£ = (ÇöÀçÆäÀÌÁö -1 ) * ÆäÀÌÁö´ç °Ô½Ã¹°¼ö + 1;
-		pageBegin = (curPage-1)*PAGE_SCALE+1;
-		// ³¡¹øÈ£ = ½ÃÀÛ¹øÈ£ + ÆäÀÌÁö´ç °Ô½Ã¹°¼ö -1;
-		pageEnd = pageBegin + PAGE_SCALE-1;
+// ì‹œì‘ë²ˆí˜¸=(í˜„ì¬í˜ì´ì§€-1)xí˜ì´ì§€ë‹¹ ê²Œì‹œë¬¼ìˆ˜ + 1
+// ëë²ˆí˜¸=ì‹œì‘ë²ˆí˜¸ + í˜ì´ì§€ë‹¹ ê²Œì‹œë¬¼ìˆ˜ - 1		
+		pageBegin = (curPage - 1) * PAGE_SCALE + 1;
+		pageEnd = pageBegin + PAGE_SCALE - 1;
 	}
-	
+
 	public int getCurPage() {
 		return curPage;
 	}
+
 	public void setCurPage(int curPage) {
 		this.curPage = curPage;
 	}
+
 	public int getPrevPage() {
 		return prevPage;
 	}
+
 	public void setPrevPage(int prevPage) {
 		this.prevPage = prevPage;
 	}
+
 	public int getNextPage() {
 		return nextPage;
 	}
+
 	public void setNextPage(int nextPage) {
 		this.nextPage = nextPage;
 	}
+
 	public int getTotPage() {
 		return totPage;
 	}
+
+	// ì „ì²´ í˜ì´ì§€ ê°¯ìˆ˜ ê³„ì‚°
 	public void setTotPage(int count) {
-		// Math.ceil(½Ç¼ö)  dhffla cjfla
-		totPage = (int)Math.ceil(count*1.0 / PAGE_SCALE);
+// Math.ceil() ì˜¬ë¦¼		
+		totPage = (int) Math.ceil(count * 1.0 / PAGE_SCALE);
 	}
+
 	public int getTotBlock() {
 		return totBlock;
 	}
-	// ÆäÀÌÁö ºí·ÏÀÇ °´¼ö °è»ê(ÃÑ 100ÆäÀÌÁö¶ó¸é 10°³ ºí·Ï)
-	public void setTotBlock() {
-		totBlock = (int)Math.ceil(totPage / BLOCK_SCALE);
+
+	public void setTotBlock(int totBlock) {
+		this.totBlock = totBlock;
 	}
+
 	public int getCurBlock() {
 		return curBlock;
 	}
+
 	public void setCurBlock(int curBlock) {
 		this.curBlock = curBlock;
 	}
+
 	public int getPrevBlock() {
 		return prevBlock;
 	}
+
 	public void setPrevBlock(int prevBlock) {
 		this.prevBlock = prevBlock;
 	}
+
 	public int getNextBlock() {
 		return nextBlock;
 	}
+
 	public void setNextBlock(int nextBlock) {
 		this.nextBlock = nextBlock;
 	}
+
 	public int getPageBegin() {
 		return pageBegin;
 	}
+
 	public void setPageBegin(int pageBegin) {
 		this.pageBegin = pageBegin;
 	}
+
 	public int getPageEnd() {
 		return pageEnd;
 	}
+
 	public void setPageEnd(int pageEnd) {
 		this.pageEnd = pageEnd;
 	}
+
 	public int getBlockBegin() {
 		return blockBegin;
 	}
+
 	public void setBlockBegin(int blockBegin) {
 		this.blockBegin = blockBegin;
 	}
+
 	public int getBlockEnd() {
 		return blockEnd;
 	}
+
 	public void setBlockEnd(int blockEnd) {
 		this.blockEnd = blockEnd;
 	}
-	public static int getPageScale() {
-		return PAGE_SCALE;
-	}
-	public static int getBlockScale() {
-		return BLOCK_SCALE;
-	}
-	
+
 }

@@ -4,8 +4,11 @@
 <%@ page session="true" isELIgnored="false"%>
 <html>
 <head>
-<title>Home</title>
+<title>Crife</title>
 <!-- bootstrap 적용 -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	crossorigin="anonymous"></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
@@ -14,21 +17,87 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 	crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-	crossorigin="anonymous"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
 	integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
 	crossorigin="anonymous"></script>
 </head>
+<style>
+/* 1줄에 프로젝트 4개씩 정렬 */
+#div{
+	float: left;
+	width: 33%;
+	margin: 3%;
+}
+.card_wrap{
+	width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#div:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+/* .carousel-caption{
+	text-align: left;
+} */
+</style>
 <body>
 <%@ include file="include/navbar.jsp"%>
-	<h1>Hello world!</h1>회원 번호 : ${login.mem_idx} / 회원 권한 : ${login.mem_type}
+<div class="bd-example">
+  <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+      <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+      <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner" style="height: 300px;">
+      <div class="carousel-item active">
+        <img src="images/1.jpg" class="d-block w-100" alt="..." height="100%">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>캠핑</h5>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/2.jpg" class="d-block w-100" alt="..." height="100%">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>여행</h5>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/dalbit.jpg" class="d-block w-100" alt="..." height="100%">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>가전</h5>
+        </div>
+      </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+	<form role="form" id="send_pro_id" method="get" action="${path}/reward/step10">
+		<input type="hidden" name="pro_id" value="2">
+	</form>
+	<script>
+		$(document).ready(function() {
+			var formObj = $("form[role='form']");
+			console.log(formObj);
+			$("#fbtn").on("click", function() {
+				formObj.submit();
+			});
+		});
+	</script>
 	<hr>
 	<h2>프로젝트 리스트</h2>
 	<c:forEach items="${list}" var="dto">
-		<div class="card" style="width: 18rem;">
+		<div class="card card_wrap" id="div" style="width: 18rem;">
 		<img src="${path}/resources/images/${dto.pro_imageURL}" class="card-img-top" width="100px" height="100px">
 		<div class="card-body">
 			<h5 class="card-title">${dto.pro_name}</h5>
@@ -87,32 +156,11 @@
 		</div>
 		</div>
 	</c:forEach>
-
-	
-	<div class="card" style="width: 18rem;">
-	  <img src="images/ryan.jpg" class="card-img-top" alt="ryan">
-	  <div class="card-body">
-	    <h5 class="card-title">RYAN</h5>
-	    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-	    <a href="${path}/project/detail/${dto.pro_id}" class="btn btn-primary">펀딩 보러가기</a>
-	  </div>
-	</div>
-	
-	<button type="button" id="fbtn">펀딩하기</button>
-	<form role="form" id="send_pro_id" method="get"
-		action="${path}/reward/step10">
-		<!--<input type="hidden" value="${project.pro_id}">  -->
-		<input type="hidden" name="pro_id" value="2">
-	</form>
-	<script>
-		$(document).ready(function() {
-			var formObj = $("form[role='form']");
-			console.log(formObj);
-			$("#fbtn").on("click", function() {
-				formObj.submit();
-			});
-		});
-	</script>
 	<hr>
+	<!-- 프로젝트 랜덤으로 1개출력 -->
+	<script>
+	var random = Math.floor(Math.random() * $('.card').length);
+	$('.card').hide().eq(random).show();
+	</script>
 </body>
 </html>

@@ -44,8 +44,8 @@ public class MakerController {
 			// 첨부 파일의 이름
 			filename = dto.getFile3().getOriginalFilename();
 			try {
-				String path ="D:\\JavaBigData2th\\mywork_spring\\.metadata\\.plugins\\"
-						+ "org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Funding\\resources\\images\\";
+				String path ="C:\\eclipse\\.metadata\\.plugins\\org.eclipse.wst.server.core\\"
+						+ "tmp0\\wtpwebapps\\Funding\\resources\\images";
 				// 디렉토리가 존재하지 않으면 생성
 				new File(path).mkdir();
 				// 임시 디렉토리에 저장된 첨부파일을 이동

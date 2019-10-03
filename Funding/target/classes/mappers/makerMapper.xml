@@ -34,7 +34,7 @@
   <update id="infoup">
   	update maker
   	set maker_name=#{maker_name}, maker_phone=#{maker_phone}, maker_intro=#{maker_intro},
-  			maker_photo=#{maker_photo}
+  			maker_photo=#{maker_photo}, maker_site= #{maker_site}
   	where maker_idx=#{maker_idx}
   </update>
   

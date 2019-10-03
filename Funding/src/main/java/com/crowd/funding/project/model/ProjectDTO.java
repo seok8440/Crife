@@ -31,4 +31,5 @@ public class ProjectDTO {
 	private String day;
 	private int maker_idx;
 	private String maker_name;
+	private int news_idx;
 }

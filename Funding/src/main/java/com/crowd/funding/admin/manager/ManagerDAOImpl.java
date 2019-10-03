@@ -16,32 +16,38 @@ public class ManagerDAOImpl implements ManagerDAO {
 	SqlSession sql;
 
 	@Override
-	public List<ManagerDTO> listManager() {
-		return  sql.selectList("admin.managerList");
+	public List<ManagerDTO> listManager() throws Exception {
+		return sql.selectList("admin.managerList");
 	}
 
 	@Override
-	public void insertManager(ManagerDTO dto) {
+	public void insertManager(ManagerDTO dto) throws Exception {
 		sql.insert("admin.insertManager");
 
 	}
 
 	@Override
-	public void updateManager(ManagerDTO dto) {
-		// TODO Auto-generated method stub
+	public void updateManager(ManagerDTO dto) throws Exception {
+		sql.update("admin.updateManager", dto);
 
 	}
 
 	@Override
-	public void deleteManager(String admin_id) {
-		// TODO Auto-generated method stub
+	public void deleteManager(String admin_id) throws Exception {
+		sql.delete("admin.deleteManager", admin_id);
 
 	}
 
 	@Override
-	public ManagerDTO viewManager(String admin_id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ManagerDTO viewManager(String admin_id) throws Exception {
+		return sql.selectOne("admin.viewManager", admin_id);
+
 	}
-	
+
+	@Override
+	public String loginCheck(ManagerDTO dto) throws Exception {
+		return sql.selectOne("admin.loginCheck", dto);
+
+	}
+
 }
